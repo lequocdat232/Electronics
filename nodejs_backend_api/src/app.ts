@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 const app: Express = express();
-import categoriesRouter from './routes/v1/categories.routes'
+import categoriesRouter from './routes/v1/categories.route'
 
 const PORT = process.env.PORT || 9000;
 
