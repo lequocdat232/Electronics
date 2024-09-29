@@ -1,4 +1,4 @@
-import {ObjectId, Model, HydratedDocument, QueryWithHelpers, SchemaDefinitionProperty} from 'mongoose';
+import {ObjectId, Model, SchemaDefinitionProperty} from 'mongoose';
 
 export enum  EnumOrderStatus {
   Pending = 'pending',
@@ -119,3 +119,13 @@ export interface IPayloadOrder {
 }
 // Models and schemas
 export type OrderModelType = Model<IOrder>;
+
+export type payloadBrand = {
+  id: ObjectId,
+  brand_name: string,
+  description?: string,
+  slug: string,
+  logo_url?: string,
+  order?: number,
+  isActive: boolean
+}
