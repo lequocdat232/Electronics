@@ -58,6 +58,21 @@ const createBrandRecord = async(payload: TPayloadBrand) =>{
     return brand
 }
 
+// 4. update Brand
+const updateBrand = async(id:string, payload:string) =>{
+    const brand = await findBrandById(id)
+    Object.assign(brand, payload);
+    await brand.save()
+    return brand
+}
+
+const deleteBrand = async(id: string) =>{
+    const brand = await findBrandById(id)
+    await brand.deleteOne({ _id: brand._id });
+    return brand
+}
+
+
 export default {
     allBrands,
     findBrandById,
