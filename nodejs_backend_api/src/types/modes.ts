@@ -120,7 +120,7 @@ export interface IPayloadOrder {
 // Models and schemas
 export type OrderModelType = Model<IOrder>;
 
-export type payloadBrand = {
+export type TPayloadBrand = {
   id: ObjectId,
   brand_name: string,
   description?: string,
