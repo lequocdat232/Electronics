@@ -5,7 +5,7 @@ import { sendJsonSuccess } from "../helpers/responseHandler"
 // 1.Get all Brands
 const allBrands  = async (req:Request, res: Response, next: NextFunction) => {
     try {
-        const brands = await brandsService.allBrands()
+        const brands = await brandsService.allBrands(req.query)
         return sendJsonSuccess(res, "success")(brands)
     } catch (error) {
         next(error)
@@ -34,8 +34,28 @@ const CreateBrand = async(req:Request, res: Response, next: NextFunction) => {
     }
 }
 
+// 4. updateBrand
+const updateBrandById = async(req:Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params
+        const payload  = req.body
+        const brand = await brandsService.updateBrand(id,payload)
+        sendJsonSuccess(res, "success")(brand)
+    } catch (error) {
+        next(error)
+    }
+}
+// 5. delete Brand
+const deleteBrand =  async(req: Request, res:Response, next: NextFunction) => {
+    const {id} = req.params
+    const brand = await brandsService.deleteBrand(id)
+    sendJsonSuccess(res,"success")(brand)
+}
+
 export default {
     allBrands,
     findBrandById,
-    CreateBrand
+    CreateBrand,
+    updateBrandById,
+    deleteBrand
 }
