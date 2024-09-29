@@ -1,6 +1,6 @@
 import createError from "http-errors";
 import Brand from "../models/brands.model";
-import { payloadBrand } from "../types/modes";
+import { TPayloadBrand } from "../types/modes";
 
 // 1.Get all Brands
 const allBrands = async () => {
@@ -17,10 +17,11 @@ const findBrandById = async(id: string)=>{
 }
 
 // 3. Create new brand
-const createBrandRecord = async(payload: payloadBrand) =>{
+const createBrandRecord = async(payload: TPayloadBrand) =>{
     const brand = await Brand.create(payload)
     return brand
 }
+
 
 export default {
     allBrands,

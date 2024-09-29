@@ -1,12 +1,9 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 const app: Express = express();
 import categoriesRouter from './routes/v1/categories.route'
-<<<<<<< HEAD
-=======
 import brandsRouter from './routes/v1/brands.route'
 import { sendJsonErrors } from './helpers/responseHandler';
-import createError from 'http-errors';
->>>>>>> Toan_code
+import createError from 'http-errors'
 
 const PORT = process.env.PORT || 9000;
 
