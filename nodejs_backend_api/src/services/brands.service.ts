@@ -59,7 +59,7 @@ const createBrandRecord = async(payload: TPayloadBrand) =>{
 }
 
 // 4. update Brand
-const updateBrand = async(id:string, payload:string) =>{
+const updateBrand = async(id:string, payload:TPayloadBrand) =>{
     const brand = await findBrandById(id)
     Object.assign(brand, payload);
     await brand.save()
