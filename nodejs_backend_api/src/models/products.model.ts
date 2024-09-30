@@ -85,9 +85,8 @@ const productSchema = new Schema({
   },
   /* Thông số kỹ thuật */
   specifications: {
-    type: Map,
-    of: String, // Chỉ định các giá trị bên trong là kiểu chuỗi
-    required: false
+    type: String,
+    require: false
   }
 },
 {
