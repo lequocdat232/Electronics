@@ -1,6 +1,6 @@
 import Category from '../models/categories.models'
 import createError from 'http-errors'
-import { TPayloadBrand, TPayloadCategory } from '../types/modes'
+import {TPayloadCategory } from '../types/modes'
 
 const findAll = async () => {
     const categories = await Category.find();
@@ -25,7 +25,7 @@ const createRecord = async (payload: TPayloadCategory) => {
     return category
 }
 // 4. update Brand
-const updateCategory = async (id: string, payload: TPayloadBrand) => {
+const updateCategory = async (id: string, payload: TPayloadCategory) => {
     const category = await findCategoryById(id)
     Object.assign(category, payload);
     await category.save()
