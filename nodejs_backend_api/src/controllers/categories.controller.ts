@@ -3,9 +3,9 @@ import categoriesService from '../services/categories.service'
 import { sendJsonSuccess } from "../helpers/responseHandler"
 
 // 1.Get all Categories
-const findAll = async (req: Request, res: Response, next: NextFunction) => {
+const findAllCategory = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const categories = await categoriesService.findAll()
+        const categories = await categoriesService.findAllCategory(req.query)
         sendJsonSuccess(res, "success")(categories)
     } catch (error) {
         next(error)
@@ -51,7 +51,7 @@ const deleteCategory = async (req: Request, res: Response, next: NextFunction) =
 }
 
 export default {
-    findAll,
+    findAllCategory,
     findCategoryById,
     createCategory,
     updateCategoryById,

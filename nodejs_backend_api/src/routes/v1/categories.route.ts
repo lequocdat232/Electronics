@@ -3,7 +3,7 @@ import categoriesController from "../../controllers/categories.controller";
 const router = express.Router();
 
 //1. Get All Categories
-router.get('', categoriesController.findAll)
+router.get('', categoriesController.findAllCategory)
 
 // 2.Find Category By Id
 router.get('/:id', categoriesController.findCategoryById)
