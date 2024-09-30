@@ -6,9 +6,7 @@ import { sendJsonSuccess } from "../helpers/responseHandler"
 const findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const categories = await categoriesService.findAll()
-        res.status(200).json({
-            data: categories
-        })
+        sendJsonSuccess(res, "success")(categories)
     } catch (error) {
         next(error)
     }
