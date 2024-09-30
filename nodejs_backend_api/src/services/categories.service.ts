@@ -33,9 +33,6 @@ const updateCategory = async (id: string, payload: TPayloadCategory) => {
 }
 const deleteCategory = async (id: string) => {
     const category = await findCategoryById(id)
-    if (!category) {
-        throw createError(400, "Category Not Found");
-    }
     await category.deleteOne({ _id: category._id })
     return category
 }
