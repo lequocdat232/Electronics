@@ -12,4 +12,10 @@ router.get('/:id', brandsController.findBrandById)
 // 3.Create Brand
 router.post('', brandsController.CreateBrand)
 
+// 4.update Brand
+router.put('/:id', brandsController.updateBrandById)
+
+// 5.delete Brand
+router.delete('/:id', brandsController.deleteBrand)
+
 export default router

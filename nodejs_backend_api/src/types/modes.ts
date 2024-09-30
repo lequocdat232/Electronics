@@ -128,4 +128,13 @@ export type TPayloadBrand = {
   logo_url?: string,
   order?: number,
   isActive: boolean
-}
+};
+export type TPayloadCategory = {
+  _id: ObjectId;
+  category_name: string;
+  slug: string;
+  imageUrl: string;
+  order: number;
+  description?: string;
+  isActive: boolean
+};
