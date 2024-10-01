@@ -28,6 +28,8 @@ const findAllCustomer = async (query: any) => {
         })
         .select('-__v -id')
         .sort(objSort)
+        .skip(offset)
+        .limit(limit)
     return {
         customers_list: customers,
         sort: objSort,

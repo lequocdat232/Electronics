@@ -28,6 +28,8 @@ const findAllCategory = async (query: any) => {
         })
         .select('-__v -id')
         .sort(objSort)
+        .skip(offset)
+        .limit(limit)
     return {
         categories_list: categories,
         sort: objSort,
