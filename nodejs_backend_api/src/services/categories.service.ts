@@ -11,7 +11,7 @@ const findAllCategory = async (query: any) => {
     // Lọc theo tên thương hiệu
     let objectFilters: any = {};
     if (query.keyword && query.keyword != '') {
-        objectFilters = { ...objectFilters, brand_name: new RegExp(query.keyword, 'i') }
+        objectFilters = { ...objectFilters, category_name: new RegExp(query.keyword, 'i') }
     }
 
     const page_str = query.page
