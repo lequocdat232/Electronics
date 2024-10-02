@@ -1,11 +1,11 @@
 import { model, Schema } from "mongoose";
-import { TPayloadCustomer } from "../types/modes"
+import { TCustomer } from "../types/modes"
 import bcrypt from "bcrypt";
 
 //Cách dùng: https://www.npmjs.com/package/bcrypt#esm-import
 const saltRounds = 10;
 // Khởi tạo schema
-const customerSchema = new Schema<TPayloadCustomer>({
+const customerSchema = new Schema<TCustomer>({
     first_name: {
         type: String,
         maxLength: 50,
@@ -47,7 +47,23 @@ const customerSchema = new Schema<TPayloadCustomer>({
     password: {
         type: String,
         maxLength: 255,
+        require: false,
         default: null
+    },
+    /* Khóa tài khoản */
+    active: {
+        type: Boolean,
+        default: true,
+        require: false
+    },
+    /* 
+     Soft delete 
+     Khi xóa sp thì đi update isDelete = true
+     */
+    isDelete: {
+        type: Boolean,
+        require: false,
+        default: false
     },
 },
     {
@@ -72,5 +88,5 @@ customerSchema.pre('save', async function (next) {
 });
 // Export một model
 
-const Customer = model<TPayloadCustomer>('Customer', customerSchema);
+const Customer = model<TCustomer>('Customer', customerSchema);
 export default Customer;

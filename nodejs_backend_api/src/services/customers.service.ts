@@ -1,6 +1,6 @@
 import Customer from '../models/customers.model'
 import createError from 'http-errors'
-import { TPayloadCustomer } from '../types/modes'
+import { TCustomer } from '../types/modes'
 
 const findAllCustomer = async (query: any) => {
     let objSort: any = {};
@@ -54,12 +54,12 @@ const findCustomerById = async (id: string) => {
     return customer
 }
 // 3. Create new customer
-const createRecord = async (payload: TPayloadCustomer) => {
+const createRecord = async (payload: TCustomer) => {
     const customer = await Customer.create(payload);
     return customer
 }
 // 4. update Customer
-const updateCustomer = async (id: string, payload: TPayloadCustomer) => {
+const updateCustomer = async (id: string, payload: TCustomer) => {
     const customer = await findCustomerById(id)
     Object.assign(customer, payload);
     await customer.save()

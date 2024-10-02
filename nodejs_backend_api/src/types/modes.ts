@@ -1,4 +1,4 @@
-import {ObjectId, Model, SchemaDefinitionProperty} from 'mongoose';
+import {ObjectId, Model, SchemaDefinitionProperty, Schema} from 'mongoose';
 
 export enum  EnumOrderStatus {
   Pending = 'pending',
@@ -58,7 +58,7 @@ export type TCustomer = {
   city: string;
   state: string;
   zip_code?: string;
-  password?: string;
+  password: string;
   active?: boolean;
   isDelete?: boolean;
 }
@@ -138,15 +138,3 @@ export type TPayloadCategory = {
   description?: string;
   isActive: boolean
 };
-export type TPayloadCustomer = {
-  _id: ObjectId;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
-  street: string;
-  city: string;
-  state: string;
-  zip_code: string;
-  password: string;
-}
