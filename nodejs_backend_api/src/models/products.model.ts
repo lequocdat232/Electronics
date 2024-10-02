@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-
+import mongooseLeanVirtuals  from 'mongoose-lean-virtuals'
 /* Khởi tạo một Schema */
 
 const productSchema = new Schema({
@@ -67,7 +67,7 @@ const productSchema = new Schema({
     default: false
   },
   /* SP mới về */
-  isNew: {
+  isRecentlyAdded: {
     type: Boolean,
     require: false,
     default: false
