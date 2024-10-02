@@ -5,6 +5,7 @@ import brandsRouter from './routes/v1/brands.route'
 import StaffsRouter from './routes/v1/staffs.route'
 import customersRouter from "./routes/v1/customers.route";
 import productsRouter from "./routes/v1/products.route";
+import authRouter from './routes/v1/auth.route'
 import { sendJsonErrors } from './helpers/responseHandler';
 import createError from 'http-errors'
 
@@ -20,6 +21,7 @@ app.use('/api/v1/brands', brandsRouter)
 app.use('/api/v1/staffs', StaffsRouter)
 app.use('/api/v1/customers', customersRouter)
 app.use('/api/v1/products', productsRouter)
+app.use('/api/v1/auth', authRouter)
 
 // HANDLER ERROR
 // Phải nằm sau phần khai báo routes
