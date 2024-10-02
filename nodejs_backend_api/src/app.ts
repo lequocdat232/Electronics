@@ -3,6 +3,7 @@ const app: Express = express();
 import categoriesRouter from './routes/v1/categories.route'
 import brandsRouter from './routes/v1/brands.route'
 import StaffsRouter from './routes/v1/staffs.route'
+import authRouter from './routes/v1/auth.route'
 import { sendJsonErrors } from './helpers/responseHandler';
 import createError from 'http-errors';
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/v1/categories', categoriesRouter)
 app.use('/api/v1/brands', brandsRouter)
 app.use('/api/v1/staffs', StaffsRouter)
+app.use('/api/v1/auth', authRouter)
 
 // HANDLER ERROR
 // Phải nằm sau phần khai báo routes
