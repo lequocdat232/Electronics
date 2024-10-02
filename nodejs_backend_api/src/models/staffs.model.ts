@@ -1,6 +1,9 @@
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt'
+import { TStaff } from '../types/modes';
 
-const staffSchema = new Schema({
+const saltRounds = 10;
+const staffSchema = new Schema<TStaff>({
   first_name: {
     type: String,
     required: true,
@@ -38,8 +41,19 @@ const staffSchema = new Schema({
 },
 {
   timestamps: true, //Tạo tự động thêm 2 trường createAt, updateAt
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
-const Staff = model('Staff', staffSchema);
+staffSchema.pre('save', async function (next) {
+  const staff = this;
+
+  const hash = bcrypt.hashSync(staff.password, saltRounds);
+
+  staff.password = hash;
+
+  next();
+});
+const Staff = model<TStaff>('Staff', staffSchema);
 
 export default Staff
