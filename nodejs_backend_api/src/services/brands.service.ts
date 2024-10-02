@@ -29,6 +29,8 @@ const allBrands = async (query: any) => {
     })
     .select('-__v -id')
     .sort(objSort)
+    .skip(offset)
+    .limit(limit)
     return {
         brands_list: brands,
         sort: objSort,

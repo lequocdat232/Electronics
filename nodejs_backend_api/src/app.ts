@@ -2,10 +2,10 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 const app: Express = express();
 import categoriesRouter from './routes/v1/categories.route'
 import brandsRouter from './routes/v1/brands.route'
+import StaffsRouter from './routes/v1/staffs.route'
 import { sendJsonErrors } from './helpers/responseHandler';
 import createError from 'http-errors';
 
-const PORT = process.env.PORT || 9000;
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
@@ -15,6 +15,7 @@ app.use(express.json());
 // });
 app.use('/api/v1/categories', categoriesRouter)
 app.use('/api/v1/brands', brandsRouter)
+app.use('/api/v1/staffs', StaffsRouter)
 
 // HANDLER ERROR
 // Phải nằm sau phần khai báo routes
