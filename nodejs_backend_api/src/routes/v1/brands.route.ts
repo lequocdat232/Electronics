@@ -1,8 +1,10 @@
 import express from "express";
 import brandsController from "../../controllers/brands.controller";
+import { authenticateToken } from "../../middlewares/auth.middleware";
 
 const router = express.Router();
 
+router.use(authenticateToken)
 // 1.Get all Brands
 router.get('', brandsController.allBrands)
 

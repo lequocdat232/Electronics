@@ -6,9 +6,11 @@ import StaffsRouter from './routes/v1/staffs.route'
 import authRouter from './routes/v1/auth.route'
 import { sendJsonErrors } from './helpers/responseHandler';
 import createError from 'http-errors';
+import cors from 'cors'
 
 
 app.use(express.json());
+app.use(cors())
 // app.use(express.urlencoded({ extended: false }));
 
 // app.get('/', (req: Request, res: Response) => {
