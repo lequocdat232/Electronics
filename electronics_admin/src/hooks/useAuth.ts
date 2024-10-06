@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosClient } from "../lib/axiosClient";
 import { devtools, persist } from "zustand/middleware";
 import { createJSONStorage } from "zustand/middleware"; // Import createJSONStorage
+import { SETTINGS } from "../constants/settings";
 
 interface User {
   _id: string;
@@ -32,12 +33,12 @@ const useAuth = create<Auth>()(
         login: async (email: string, password: string) => {
           try {
             const response = await axiosClient.post(
-              "http://localhost:8080/api/v1/auth/login",
+              `${SETTINGS.URL_API}/v1/auth/login`,
               { email, password }
             );
             if (response && response.data.statusCode === 200) {
               const responseProfile = await axiosClient.get(
-                "http://localhost:8080/api/v1/auth/profile"
+                `${SETTINGS.URL_API}/v1/auth/profile`
               );
 
               set({
