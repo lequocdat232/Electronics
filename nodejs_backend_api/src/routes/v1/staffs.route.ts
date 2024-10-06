@@ -2,9 +2,11 @@ import express from "express";
 import staffsController from "../../controllers/staffs.controller";
 import validateSchema from "../../middlewares/validateSchema.middleware";
 import staffsValidation from "../../validations/staffs.validation";
+import { authenticateToken } from "../../middlewares/auth.middleware";
 
 const router = express.Router();
 
+router.use(authenticateToken)
 // 1. Get all staffs
 router.get('', staffsController.allStaffs);
 
