@@ -4,6 +4,7 @@ import categoriesRouter from './routes/v1/categories.route'
 import brandsRouter from './routes/v1/brands.route'
 import customersRouter from "./routes/v1/customers.route";
 import productsRouter from "./routes/v1/products.route";
+import ordersRouter from "./routes/v1/orders.route";
 import { sendJsonErrors } from './helpers/responseHandler';
 import createError from 'http-errors'
 
@@ -19,6 +20,7 @@ app.use('/api/v1/categories', categoriesRouter)
 app.use('/api/v1/brands', brandsRouter)
 app.use('/api/v1/customers', customersRouter)
 app.use('/api/v1/products', productsRouter)
+app.use('/api/v1/orders', ordersRouter)
 
 
 // HANDLER ERROR
