@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { SETTINGS } from "../constants/settings";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Input, message, Upload } from "antd";
+import { Button, Form, Input } from "antd";
 import { useParams } from "react-router-dom";
-import { UploadProps } from "antd/es/upload";
-import { UploadOutlined } from "@ant-design/icons";
+// import { UploadProps } from "antd/es/upload";
+// import { UploadOutlined } from "@ant-design/icons";
 interface ICategory {
   _id?: string;
   category_name?: string;
@@ -19,7 +19,7 @@ interface ICategory {
 }
 
 function CategoryEdit() {
-  const [imageUrl, setImageUrl] = useState<string>();
+  // const [imageUrl, setImageUrl] = useState<string>();
   const [categoryName, setCategoryName] = useState("");
   const [categoryDes, setCategoryDes] = useState("");
   const [categorySlug, setCategorySlug] = useState("");
@@ -46,25 +46,25 @@ function CategoryEdit() {
   //   return isJpgOrPng && isLt2M;
   // };
 
-  const handleBeforeUpload = () => {
-    return false; // Prevent automatic upload
-  };
+  // const handleBeforeUpload = () => {
+  //   return false; // Prevent automatic upload
+  // };
 
-  const props: UploadProps = {
-    name: "file",
-    beforeUpload: handleBeforeUpload,
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        setImageUrl(info.file.name);
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+  // const props: UploadProps = {
+  //   name: "file",
+  //   beforeUpload: handleBeforeUpload,
+  //   onChange(info) {
+  //     if (info.file.status !== "uploading") {
+  //       console.log(info.file, info.fileList);
+  //     }
+  //     if (info.file.status === "done") {
+  //       setImageUrl(info.file.name);
+  //       message.success(`${info.file.name} file uploaded successfully`);
+  //     } else if (info.file.status === "error") {
+  //       message.error(`${info.file.name} file upload failed.`);
+  //     }
+  //   },
+  // };
 
   const queryClient = useQueryClient();
 
@@ -92,7 +92,7 @@ function CategoryEdit() {
     category_name: categoryName,
     description: categoryDes,
     slug: categorySlug,
-    imageUrl: imageUrl,
+    imageUrl: "imageUrl",
     isActive: true,
   };
 
@@ -195,7 +195,7 @@ function CategoryEdit() {
                       ></Input>
                     </label>
                   </Form.Item>
-                  <Form.Item
+                  {/* <Form.Item
                     name='upload'
                     label='Upload'
                     valuePropName='fileList'
@@ -215,7 +215,7 @@ function CategoryEdit() {
                         />
                       </Button>
                     </Upload>
-                  </Form.Item>
+                  </Form.Item> */}
                 </>
 
                 <Button
@@ -223,7 +223,7 @@ function CategoryEdit() {
                   htmlType='submit'
                   className=' mt-3 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple'
                 >
-                  Thêm mới
+                  Sửa đổi
                 </Button>
               </Form>
             </div>
