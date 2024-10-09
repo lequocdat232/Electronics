@@ -1,4 +1,6 @@
 import { Helmet } from "react-helmet-async";
+import BrandAdd from "../components/BrandComponents/BrandAdd";
+import BrandList from "../components/BrandComponents/BrandList";
 
 function BrandPage() {
   return (
@@ -15,6 +17,10 @@ function BrandPage() {
             Thương hiệu
           </h2>
           <div className='grid grid-cols-12 md:grid-cols-12 gap-[15px]'>
+            <BrandAdd></BrandAdd>
+            <BrandList></BrandList>
+          </div>
+          {/* <div className='grid grid-cols-12 md:grid-cols-12 gap-[15px]'>
             <div className='col-span-12 md:col-span-5'>
               <h3 className='mb-3  text-gray-700 dark:text-gray-200'>
                 Thêm mới
@@ -466,7 +472,7 @@ function BrandPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </>
