@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 interface TStaff{
 	first_name: string;
@@ -23,7 +24,7 @@ const StaffEdit = () => {
     const [formUpdate] = Form.useForm();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const { id } = useParams();
-    
+    const { user } = useAuth()    
     const fetchStaffById = async(id: string) => {
         const url = `${SETTINGS.URL_API}/v1/staffs/${id}`
         const res = await axiosClient.get(url)
@@ -247,6 +248,7 @@ const StaffEdit = () => {
                                     } 
                                     name ="role" >
                                     <Select
+                                         disabled={user?.role !== 1}
                                         className="w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                                     >
                                         <Option value="1">Quản trị viên</Option>

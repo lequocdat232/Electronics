@@ -57,7 +57,7 @@ const StaffsPage = () => {
 
 
 	useEffect(() => {
-        if (page === 1 && !params.has("msg")) navigate("/staffs");
+        if (page === 1 && !params.has("msg") && !params.has("keyword") && !params.has("phone") && !params.has("email")) navigate("/staffs");
     }, [page, navigate, params]);
 
 	const fetchStaffs = async() =>{

@@ -22,6 +22,7 @@ interface Auth {
     password: string
   ) => Promise<{ isAuthenticated: boolean; error: string }>;
   logout: () => void;
+  refetchUserProfile: () => Promise<void>;
 }
 
 const useAuth = create<Auth>()(
@@ -66,13 +67,24 @@ const useAuth = create<Auth>()(
           localStorage.removeItem("token");
           localStorage.removeItem("refreshToken");
         },
+        refetchUserProfile: async () => {
+          try {
+            const responseProfile = await axiosClient.get(
+              `${SETTINGS.URL_API}/v1/auth/profile`
+            );
+            set({ user: responseProfile.data.data }); // Cập nhật lại thông tin user
+          } catch (error) {
+            console.error("Failed to refetch user profile", error);
+          }
+        },
       }),
       {
         name: "auth-storage", // Tên của key lưu trữ
-        storage: createJSONStorage(() => sessionStorage), // Lưu trữ trong sessionStorage (tuỳ chọn, mặc định là localStorage)
+        storage: createJSONStorage(() => localStorage), // Lưu trữ trong sessionStorage (tuỳ chọn, mặc định là localStorage)
       }
     )
   )
 );
+
 
 export default useAuth;

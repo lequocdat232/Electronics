@@ -4,9 +4,10 @@ import { SETTINGS } from "../constants/settings";
 import { axiosClient } from "../lib/axiosClient";
 import { useMutation} from "@tanstack/react-query";
 import { UploadOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 interface TStaff{
 	_id?: string;
@@ -22,9 +23,16 @@ interface TStaff{
 }
 const { Option } = Select;
 const StaffAdd = () => {
+    const navigate = useNavigate()
+    const { user }  = useAuth()
+    useEffect(() => {
+        if(user?.role !== 1){
+            navigate('/')
+        }
+    }, [navigate, user])
+
     const [formCreate] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
-    const navigate = useNavigate()
    
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 

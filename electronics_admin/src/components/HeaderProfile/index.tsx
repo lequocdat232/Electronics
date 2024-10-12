@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import { SETTINGS } from "../../constants/settings";
@@ -8,7 +8,11 @@ const HeaderProfile = () => {
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
-    const {user, logout } = useAuth()
+    const {user, logout, refetchUserProfile  } = useAuth()
+
+    useEffect(() => {
+        refetchUserProfile();
+    }, [refetchUserProfile]);
 
     return (
     <>
@@ -33,10 +37,10 @@ const HeaderProfile = () => {
                         <svg className="w-4 h-4 mr-3" aria-hidden="true" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24" stroke="currentColor">
                             <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span>Profile</span>
+                        <span>Tài khoản</span>
                     </Link>
                 </li>
-                <li className="flex">
+                {/* <li className="flex">
                 <a
                     className="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                     href="#"
@@ -55,7 +59,7 @@ const HeaderProfile = () => {
                     </svg>
                     <span>Settings</span>
                 </a>
-                </li>
+                </li> */}
                 <li className="flex">
                 <a
                      onClick={logout}
@@ -77,7 +81,7 @@ const HeaderProfile = () => {
                     <path d="M4 16h2a2 2 0 012 2v2a2 2 0 01-2 2H4" />
                     <path d="M16 16h2a2 2 0 012 2v2a2 2 0 01-2 2h-2" />
                     </svg>
-                    <span>Log out</span>
+                    <span>Đăng xuất</span>
                 </a>
                 </li>
             </ul>)}
