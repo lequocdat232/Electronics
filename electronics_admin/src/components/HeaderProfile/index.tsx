@@ -1,18 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import { SETTINGS } from "../../constants/settings";
+import { axiosClient } from "../../lib/axiosClient";
+import { useQuery } from "@tanstack/react-query";
 
 const HeaderProfile = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
-    const {user, logout, refetchUserProfile  } = useAuth()
+    const {user, logout} = useAuth()
+    const idProfile = user?._id
 
-    useEffect(() => {
-        refetchUserProfile();
-    }, [refetchUserProfile]);
+    const fetchProfile = async (idProfile: string) => {
+        const url = `${SETTINGS.URL_API}/v1/staffs/${idProfile}`
+        const res = await axiosClient.get(url)
+        return res.data.data
+    }
+
+    const getProfile =  useQuery({
+        queryKey: ["staff", idProfile],
+		queryFn: () => fetchProfile(idProfile!),
+        enabled: !!idProfile,
+    })
+
 
     return (
     <>
@@ -23,9 +35,9 @@ const HeaderProfile = () => {
                 className="align-middle rounded-full focus:shadow-outline-purple focus:outline-none" aria-label="Account" aria-haspopup="true" >
                 {
                     user?.avatar && user?.avatar !== null  ? (
-                        <img className="w-8 h-8 rounded-full object-cover" src= {`${SETTINGS.URL_IMAGE}/${user.avatar}`} alt={user.fullname} />
+                        <img className="w-8 h-8 rounded-full object-cover" src= {`${SETTINGS.URL_IMAGE}/${getProfile?.data?.avatar}`} alt={getProfile?.data?.fullname} />
                     ) : (
-                        <img className="w-8 h-8 rounded-full object-cover" src="/images/noavatar.png" alt={user?.fullname} />
+                        <img className="w-8 h-8 rounded-full object-cover" src="/images/noavatar.png" alt={getProfile?.data?.fullname} />
                     )
                 }
             </button>

@@ -34,7 +34,7 @@ const allStaffs = async (query: any) => {
     .find({
         ...objectFilters
     })
-    .select('-__v -id')
+    .select('-__v -id -password -createdAt -updatedAt')
     .sort(objSort)
     .skip(offset)
     .limit(limit)

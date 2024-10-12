@@ -31,6 +31,7 @@ const StaffsPage = () => {
 	const navigate = useNavigate()
 	const [params] = useSearchParams()
 	const {user} = useAuth()
+
 	const [formSearch] = Form.useForm();
 	const [messageApi, contextHolder] = message.useMessage();
 	const page_str = params.get("page");
@@ -43,6 +44,8 @@ const StaffsPage = () => {
 	const phone_staff = params.get('phone')
 	const phone = phone_staff ? phone_staff : null
 	const msg = params.get("msg")
+
+    
 
 	const hasShownMessageRef = useRef(false);
 	useEffect(() => {
@@ -59,6 +62,7 @@ const StaffsPage = () => {
 	useEffect(() => {
         if (page === 1 && !params.has("msg") && !params.has("keyword") && !params.has("phone") && !params.has("email")) navigate("/staffs");
     }, [page, navigate, params]);
+	
 
 	const fetchStaffs = async() =>{
 		let url = `${SETTINGS.URL_API}/v1/staffs?`
@@ -90,7 +94,7 @@ const StaffsPage = () => {
 		mutationFn: fetchDeleleStaff,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['staffs',page],
+				queryKey: ['staffs',page, name,email, phone],
 			});
 	  
 			messageApi.open({
@@ -129,8 +133,13 @@ const StaffsPage = () => {
     const onFinishFailedSearch = async (errorInfo:unknown) => {
         console.log("ErrorInfo", errorInfo);
     };
-	
 
+	useEffect(() => {
+        if(user?.role != 1){
+            navigate('/')
+        }
+    }, [navigate, user])
+	
   	return (
     <>
 		<Helmet>
