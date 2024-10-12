@@ -39,6 +39,7 @@ export type TfindAllProduct = {
 
 export type TStaff = {
   _id?: ObjectId;
+  avatar?: string;
   first_name: string;
   last_name: string;
   phone: string;

@@ -4,6 +4,10 @@ import { TStaff } from '../types/modes';
 
 const saltRounds = 10;
 const staffSchema = new Schema<TStaff>({
+  avatar : {
+    type: String,
+    require: false,
+  },
   first_name: {
     type: String,
     required: true,
@@ -37,6 +41,10 @@ const staffSchema = new Schema<TStaff>({
     maxLength: 255,
     require: false,
     default: null
+  },
+  role:{
+    type: Number,
+    default: 2
   }
 },
 {
@@ -45,12 +53,17 @@ const staffSchema = new Schema<TStaff>({
   toObject: { virtuals: true },
 });
 
+staffSchema.virtual('fullname').get(function () {
+  return this.last_name + ' ' + this.first_name;
+});
+
 staffSchema.pre('save', async function (next) {
   const staff = this;
 
-  const hash = bcrypt.hashSync(staff.password, saltRounds);
-
-  staff.password = hash;
+  if (staff.password) {  
+    const hash = bcrypt.hashSync(staff.password, saltRounds);
+    staff.password = hash;
+  }
 
   next();
 });

@@ -6,10 +6,11 @@ import { SETTINGS } from "../constants/settings";
 
 interface User {
   _id: string;
+  avatar?: string;
   first_name: string;
   last_name: string;
-  full_name: string;
-  role: string;
+  fullname: string;
+  role: number;
 }
 
 interface Auth {

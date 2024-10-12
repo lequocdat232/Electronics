@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import './App.css'
 import DefaultLayouts from "./layouts/DefaultLayouts";
 import { routesPage } from "./routes";
@@ -12,7 +13,8 @@ function App() {
   return (
     <>
 		<QueryClientProvider client={queryClient}>
-			<BrowserRouter>
+			<HelmetProvider>
+				<BrowserRouter>
 				<Routes>
 					<Route path='/' element= { <DefaultLayouts />}>
 						{routesPage.map((route, index) => (
@@ -27,6 +29,7 @@ function App() {
 					<Route path='/login' element= { <LoginPage />} />
 				</Routes>
 				</BrowserRouter>
+			</HelmetProvider>
 		</QueryClientProvider>
     </>
   )

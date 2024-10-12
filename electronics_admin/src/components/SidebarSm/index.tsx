@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom"
 import { menuItems } from "../../routes"
 import { useState } from "react"
 
-function SidebarSm() {
+const SidebarSm = () => {
   const [isShow, setIsShow] = useState<number>(-1)
   const showSubMenu = (index: number) => {
     setIsShow(isShow === index ? -1 : index);
