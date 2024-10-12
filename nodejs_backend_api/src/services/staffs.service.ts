@@ -9,11 +9,18 @@ const allStaffs = async (query: any) => {
     const orderBy = query.order && query.order == 'ASC' ? 1 : -1
     objSort = { ...objSort,[sortBy]: orderBy }
 
-    // Lọc theo tên thương hiệu
+    // Lọc theo tên nhân viên
     let objectFilters: any = {};
     if(query.keyword && query.keyword !=''){
         objectFilters = { ...objectFilters, first_name: new RegExp(query.keyword, 'i')}
     }
+    if(query.email && query.email !=''){
+        objectFilters = { ...objectFilters, email: new RegExp(query.email, 'i')}
+    }
+    if(query.phone && query.phone !=''){
+        objectFilters = { ...objectFilters, phone: new RegExp(query.phone, 'i')}
+    }
+    
 
     const page_str = query.page
     const limit_str = query.limit
@@ -27,7 +34,7 @@ const allStaffs = async (query: any) => {
     .find({
         ...objectFilters
     })
-    .select('-__v -id')
+    .select('-__v -id -password -createdAt -updatedAt')
     .sort(objSort)
     .skip(offset)
     .limit(limit)
@@ -35,7 +42,9 @@ const allStaffs = async (query: any) => {
         staffs_list: staffs,
         sort: objSort,
         filters: {
-            first_name: query.keyword || null
+            first_name: query.keyword || null,
+            email: query.email || null,
+            phone: query.phone || null
         },
         pagination: {
             page,
@@ -47,7 +56,7 @@ const allStaffs = async (query: any) => {
 }
 // 2.Find Staff by Id
 const findStaffById = async(id: string)=>{
-    const staff = await Staff.findById(id)
+    const staff = await Staff.findById(id).select('-__v -id -password')
     if(!staff){
         throw createError(400, 'Staff Not Found')
     }

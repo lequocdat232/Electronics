@@ -1,4 +1,4 @@
-function CategoryList() {
+const CategoryList = () => {
   return (
     <div className="col-span-12 md:col-span-7">
       <div className="w-full mb-8 overflow-hidden rounded-lg shadow-xs">

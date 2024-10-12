@@ -1,14 +1,14 @@
-import { Helmet } from "react-helmet"
+import { HelmetProvider } from "react-helmet-async"
 
-function BrandEdit() {
+const BrandEdit = () => {
   return (
     <>
-        <Helmet>
+        <HelmetProvider>
             <meta charSet="utf-8" />
             <title>Electronics - Sửa thương hiệu </title>
             <link rel="canonical" href={window.location.href} />
             <meta name="description" content="Sửa thương hiệu" />
-        </Helmet>
+        </HelmetProvider>
         <main className="h-full overflow-y-auto">
             <div className="container px-6 mx-auto grid">
                 <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">

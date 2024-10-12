@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function HeaderDark() {
+const HeaderDark = () => {
 	const [isDarkMode, setIsDarkMode] = useState(() => {
 		return document.documentElement.classList.contains('dark');
 	});
@@ -8,9 +8,9 @@ function HeaderDark() {
 	setIsDarkMode(!isDarkMode);
 
 		if (!isDarkMode) {
-				document.documentElement.classList.add('dark'); 
+			document.documentElement.classList.add('dark'); 
 		} else {
-				document.documentElement.classList.remove('dark');
+			document.documentElement.classList.remove('dark');
 		}
 	};
 	useEffect(() => {

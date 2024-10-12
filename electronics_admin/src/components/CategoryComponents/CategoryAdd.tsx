@@ -1,4 +1,4 @@
-function CategoryAdd() {
+const CategoryAdd = () => {
   return (
     <div className="col-span-12 md:col-span-5">
         <h3 className="mb-3  text-gray-700 dark:text-gray-200">

@@ -1,6 +1,6 @@
-import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet-async"
 
-function CategoryEdit() {
+const CategoryEdit = () => {
   return (
     <>
     <Helmet>
