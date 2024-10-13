@@ -9,7 +9,6 @@ import LoginPage from "./pages/LoginPage";
 const queryClient = new QueryClient();
 
 function App() {
-
   return (
     <>
 		<QueryClientProvider client={queryClient}>

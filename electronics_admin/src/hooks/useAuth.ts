@@ -69,7 +69,7 @@ const useAuth = create<Auth>()(
       }),
       {
         name: "auth-storage", // Tên của key lưu trữ
-        storage: createJSONStorage(() => localStorage), // Lưu trữ trong sessionStorage (tuỳ chọn, mặc định là localStorage)
+        storage: createJSONStorage(() => sessionStorage), // Lưu trữ trong sessionStorage (tuỳ chọn, mặc định là localStorage)
       }
     )
   )
