@@ -16,8 +16,8 @@ interface IBrand {
 function BrandList() {
   const [brands, setbrands] = useState<IBrand[]>([]);
 
-  const fetchGroups = (): Promise<IBrand[]> =>
-    axios.get(SETTINGS.URL_API + "/v1/brands").then((response) => {
+  const fetchGroups = async () =>
+    await axios.get(SETTINGS.URL_API + "/v1/brands").then((response) => {
       console.log(response.data.data.brands_list);
       return response.data.data.brands_list;
     });
