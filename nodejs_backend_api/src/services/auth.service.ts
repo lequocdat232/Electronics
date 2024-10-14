@@ -25,6 +25,9 @@ const login = async (email: string, password: string) =>{
     if(!staff){
         throw createError(400, "Invalid email or password")
     }
+    if (!staff.active) {
+        throw createError(400, "Invalid email or password");
+    }
     const passwordHash = staff.password
     const isValid = await bcrypt.compareSync(password, passwordHash)
     if(!isValid){

@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
-function ProductEdit() {
+const ProductEdit = () => {
   return (
     <>
       <Helmet>
@@ -64,6 +65,6 @@ function ProductEdit() {
       </main>
     </>
   );
-}
+};
 
 export default ProductEdit;

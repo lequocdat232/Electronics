@@ -6,10 +6,11 @@ import { SETTINGS } from "../constants/settings";
 
 interface User {
   _id: string;
+  avatar?: string;
   first_name: string;
   last_name: string;
-  full_name: string;
-  role: string;
+  fullname: string;
+  role: number;
 }
 
 interface Auth {
@@ -68,10 +69,11 @@ const useAuth = create<Auth>()(
       }),
       {
         name: "auth-storage", // Tên của key lưu trữ
-        storage: createJSONStorage(() => sessionStorage), // Lưu trữ trong sessionStorage (tuỳ chọn, mặc định là localStorage)
+        storage: createJSONStorage(() => localStorage), // Lưu trữ trong sessionStorage (tuỳ chọn, mặc định là localStorage)
       }
     )
   )
 );
+
 
 export default useAuth;
