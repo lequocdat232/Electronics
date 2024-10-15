@@ -96,11 +96,7 @@ function BrandList() {
 
                     <td className='px-4 py-3 text-xs'>{brand.order}</td>
                     <td className='px-4 py-3 text-sm'>
-                      <a
-                        href={
-                          SETTINGS.URL_frontend_admin + "/brand/" + brand._id
-                        }
-                      >
+                      <a href={SETTINGS.URL_API + "/v1/brand/" + brand._id}>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
                           className='w-5 h-5'

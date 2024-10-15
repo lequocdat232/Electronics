@@ -3,8 +3,19 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { SETTINGS } from "../constants/settings";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Input } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Radio,
+  Upload,
+  UploadFile,
+  UploadProps,
+} from "antd";
 import { useParams } from "react-router-dom";
+import { axiosClient } from "../lib/axiosClient";
+import { UploadOutlined } from "@ant-design/icons";
 // import { UploadProps } from "antd/es/upload";
 // import { UploadOutlined } from "@ant-design/icons";
 interface ICategory {
@@ -19,111 +30,137 @@ interface ICategory {
 }
 
 function CategoryEdit() {
-  // const [imageUrl, setImageUrl] = useState<string>();
-  const [categoryName, setCategoryName] = useState("");
-  const [categoryDes, setCategoryDes] = useState("");
-  const [categorySlug, setCategorySlug] = useState("");
-  const [category, setCategory] = useState<ICategory | null>(null);
-  const { id } = useParams<{ id: string }>();
+  const [formUpdate] = Form.useForm();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const { id } = useParams();
+  const fetchCategoryById = async (id: string) => {
+    const url = `${SETTINGS.URL_API}/v1/Categories/${id}`;
+    const res = await axiosClient.get(url);
+    return res.data.data;
+  };
 
-  const categoryId = id;
-
-  // const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  //   const reader = new FileReader();
-  //   reader.addEventListener("load", () => callback(reader.result as string));
-  //   reader.readAsDataURL(img);
-  // };
-
-  // const beforeUpload = (file: FileType) => {
-  //   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  //   if (!isJpgOrPng) {
-  //     message.error("You can only upload JPG/PNG file!");
-  //   }
-  //   const isLt2M = file.size / 1024 / 1024 < 2;
-  //   if (!isLt2M) {
-  //     message.error("Image must smaller than 2MB!");
-  //   }
-  //   return isJpgOrPng && isLt2M;
-  // };
-
-  // const handleBeforeUpload = () => {
-  //   return false; // Prevent automatic upload
-  // };
-
-  // const props: UploadProps = {
-  //   name: "file",
-  //   beforeUpload: handleBeforeUpload,
-  //   onChange(info) {
-  //     if (info.file.status !== "uploading") {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === "done") {
-  //       setImageUrl(info.file.name);
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //     } else if (info.file.status === "error") {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  // };
-
-  const queryClient = useQueryClient();
-
-  const fetchGroups = (): Promise<ICategory> =>
-    axios
-      .get(SETTINGS.URL_API + "/v1/categories/" + categoryId)
-      .then((response) => {
-        console.log(response.data.data);
-        return response.data.data;
-      });
-
-  const { data, isSuccess } = useQuery<ICategory>({
-    queryKey: ["category"],
-    queryFn: fetchGroups,
+  const getCategoryById = useQuery({
+    queryKey: ["Category", id],
+    queryFn: () => fetchCategoryById(id!),
+    enabled: !!id,
   });
 
   useEffect(() => {
-    if (isSuccess) {
-      setCategory(data);
-      console.log("data" + category);
+    if (getCategoryById.data) {
+      formUpdate.setFieldsValue({
+        ...getCategoryById.data,
+      });
     }
-  }, [isSuccess, data, category]);
+  }, [getCategoryById.data, formUpdate]);
 
-  const jsonData = {
-    category_name: categoryName,
-    description: categoryDes,
-    slug: categorySlug,
-    imageUrl: "imageUrl",
-    isActive: true,
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const handleUpload = async (file: UploadFile) => {
+    const formData = new FormData();
+    formData.append("file", file as unknown as File);
+    try {
+      const response = await axiosClient.post(
+        `${SETTINGS.URL_API}/v1/upload/single-handle`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        return response.data.data.link;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const statusCode = error.response?.data.statusCode;
+        if (statusCode === 400) {
+          messageApi.open({
+            type: "error",
+            content: "Dung lượng ảnh không lớn hơn 2MB",
+          });
+        } else {
+          messageApi.open({
+            type: "error",
+            content:
+              "Chỉ dược upload hình .png, .gif, .jpg, webp, and .jpeg format allowed!",
+          });
+        }
+        return null;
+      } else {
+        console.log("Unexpected error:", error);
+        return null;
+      }
+    }
   };
 
-  const putCategory = async (newCategory: ICategory) =>
-    axios
-      .put(SETTINGS.URL_API + "/v1/categories/" + category?._id, newCategory)
-      .then((response) => response.data);
+  const fetchUpdateCategory = async (payload: ICategory) => {
+    const url = `${SETTINGS.URL_API}/v1/categories/${id}`;
+    const resUpdate = await axiosClient.put(url, payload);
+    return resUpdate.data.data;
+  };
+  const queryClient = useQueryClient();
+  const updateMutationCategory = useMutation({
+    mutationFn: fetchUpdateCategory,
 
-  // Mutations
-  const editCategoryMutation = useMutation({
-    mutationFn: putCategory,
     onSuccess: () => {
-      // Làm tươi lại dữ liệu, ở trang danh sách
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({
+        queryKey: ["Category", id],
+      });
+      messageApi.open({
+        type: "success",
+        content: "Cập nhật thành viên thành công!",
+      });
+    },
+    onError: () => {
+      messageApi.open({
+        type: "error",
+        content: "Cập nhật thành viên lỗi!",
+      });
     },
   });
 
-  const handleEditCategory = () => {
-    //Giả lập dữ liệu lấy lên được từ Form, sau đó đưa vào mutate
-    editCategoryMutation.mutate({
-      ...jsonData,
-    });
+  const onFinishUpdate = async (values: ICategory) => {
+    if (fileList.length === 0) {
+      updateMutationCategory.mutate(values);
+    } else {
+      const resulUpload = await handleUpload(fileList[0]);
+      if (resulUpload !== null) {
+        const info_Category = { ...values, imageUrl: resulUpload };
+        // Gọi api để thêm thành viên
+        updateMutationCategory.mutate(info_Category);
+      }
+    }
   };
+  const onFinishFailedUpdate = async (errorInfo: unknown) => {
+    console.log("ErrorInfo", errorInfo);
+  };
+
+  const uploadProps: UploadProps = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: (file) => {
+      setFileList([file]); // Chỉ chọn một file, nếu cần nhiều file thì sử dụng `setFileList([...fileList, file])`
+      return false; // Tắt upload tự động
+    },
+    fileList,
+  };
+
   return (
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Electronics - Sửa danh mục </title>
+        <title>Electronics - Sửa nhân viên </title>
         <link rel='canonical' href={window.location.href} />
-        <meta name='description' content='Sửa danh mục' />
+        <meta name='description' content='Sửa nhân viên' />
       </Helmet>
+      {contextHolder}
       <main className='h-full overflow-y-auto'>
         <div className='container px-6 mx-auto grid'>
           <h2 className='my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200'>
@@ -134,97 +171,135 @@ function CategoryEdit() {
               <h3 className='mb-3  text-gray-700 dark:text-gray-200'>
                 Chỉnh sửa
               </h3>
-              <Form onFinish={handleEditCategory}>
-                <>
+              <Form
+                form={formUpdate}
+                name='form-update'
+                onFinish={onFinishUpdate}
+                onFinishFailed={onFinishFailedUpdate}
+                autoComplete='off'
+              >
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
                   <Form.Item
-                    name='name'
-                    rules={[
-                      {
-                        required: true,
-                        message: "làm ơn hãy điền tên danh mục",
-                      },
-                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
-                      { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
-                    ]}
-                  >
-                    <label className='block mt-4 text-sm'>
-                      <span className='text-gray-700 dark:text-gray-400'>
-                        Tên danh mục
+                    name='category_name'
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
+                        Tên
                       </span>
-                      <Input
-                        placeholder={category?.category_name}
-                        className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                        type='string'
-                        onChange={(e) => setCategoryName(e.target.value)}
-                      ></Input>
-                    </label>
+                    }
+                    rules={[{ required: true, message: "Vui lòng nhập tên" }]}
+                  >
+                    <Input
+                      placeholder='Nhập tên của bạn'
+                      className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
+                    />
                   </Form.Item>
                   <Form.Item
                     name='description'
-                    rules={[
-                      { max: 500, message: "Độ dài ko được quá 500 ký tự" },
-                    ]}
-                  >
-                    <label className='block mt-4 text-sm'>
-                      <span className='text-gray-700 dark:text-gray-400'>
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
                         Mô tả
                       </span>
-                      <Input
-                        placeholder={category?.description}
-                        className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                        type='string'
-                        onChange={(e) => setCategoryDes(e.target.value)}
-                      ></Input>
-                    </label>
+                    }
+                    rules={[{ required: true, message: "Vui lòng nhập họ" }]}
+                  >
+                    <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
+                </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
                   <Form.Item
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
+                        Đường dẫn
+                      </span>
+                    }
                     name='slug'
+                    rules={[
+                      { required: true, message: "Vui lòng nhập đường dẫn" },
+                      {
+                        type: "string",
+                        message: "Vui lòng nhập đúng định dạng email",
+                      },
+                    ]}
+                  >
+                    <Input
+                      disabled
+                      className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
+                    />
+                  </Form.Item>
+                </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
+                  <Form.Item
+                    name='order'
                     rules={[
                       { max: 50, message: "Độ dài ko được quá 50 ký tự" },
                     ]}
                   >
                     <label className='block mt-4 text-sm'>
                       <span className='text-gray-700 dark:text-gray-400'>
-                        Đường dẫn
+                        Thứ tự
                       </span>
                       <Input
-                        placeholder={category?.slug}
                         className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                        type='string'
-                        onChange={(e) => setCategorySlug(e.target.value)}
+                        type='number'
                       ></Input>
                     </label>
                   </Form.Item>
-                  {/* <Form.Item
-                    name='upload'
-                    label='Upload'
-                    valuePropName='fileList'
-                    getValueFromEvent={(e) =>
-                      Array.isArray(e) ? e : e && e.fileList
-                    }
-                    rules={[
-                      { required: true, message: "Please upload a file!" },
-                    ]}
-                  >
-                    <Upload {...props}>
-                      <Button icon={<UploadOutlined />}>
-                        <img
-                          src={imageUrl}
-                          alt='file'
-                          style={{ width: "100%" }}
-                        />
-                      </Button>
-                    </Upload>
-                  </Form.Item> */}
-                </>
+                </div>
+                <div className='mt-2'>
+                  <Form.Item name='isActive'>
+                    <Radio.Group name='isActive'>
+                      <Radio
+                        value={true}
+                        className='inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
+                      >
+                        <span className='ml-2 text-gray-600 dark:text-gray-400'>
+                          Kích hoạt
+                        </span>
+                      </Radio>
 
-                <Button
-                  type='primary'
-                  htmlType='submit'
-                  className=' mt-3 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple'
-                >
-                  Sửa đổi
-                </Button>
+                      <Radio
+                        value={false}
+                        className='ml-6 inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
+                      >
+                        <span className='ml-2 text-gray-600 dark:text-gray-400'>
+                          Tạm khóa
+                        </span>
+                      </Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </div>
+                <div className='my-2'>
+                  <img
+                    className='w-[100px] h-[100px] object-cover mb-2'
+                    src={
+                      getCategoryById.data?.imgUrl &&
+                      getCategoryById.data?.imgUrl !== null
+                        ? `${SETTINGS.URL_IMAGE}/${getCategoryById.data?.imgUrl}`
+                        : `/images/noavatar.png`
+                    }
+                    alt={getCategoryById.data?.fullname}
+                  />
+                  <Form.Item
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
+                        Ảnh danh mục
+                      </span>
+                    }
+                  >
+                    <Upload {...uploadProps}>
+                      <Button icon={<UploadOutlined />}>Select File</Button>
+                    </Upload>
+                  </Form.Item>
+                </div>
+                <Form.Item>
+                  <Button
+                    className='pb-[28px] block px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple w-auto'
+                    type='primary'
+                    htmlType='submit'
+                  >
+                    Cập nhật
+                  </Button>
+                </Form.Item>
               </Form>
             </div>
           </div>

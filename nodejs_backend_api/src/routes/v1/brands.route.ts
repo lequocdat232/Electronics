@@ -15,22 +15,8 @@ router.get("", brandsController.allBrands);
 router.get("/:id", brandsController.findBrandById);
 
 // 3.Create Brand
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./src/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
 
-const upload = multer({ storage: storage });
-router.post("", upload.single("file"), (req, res, next) => {
-  brandsController.createBrand(req, res, next).catch(next); // Ensure errors are passed to the next middleware
-});
+router.post("", brandsController.createBrand);
 
 // 4.update Brand
 router.put("/:id", brandsController.updateBrandById);
@@ -38,4 +24,5 @@ router.put("/:id", brandsController.updateBrandById);
 // 5.delete Brand
 router.delete("/:id", brandsController.deleteBrand);
 
+router.post("/upload", brandsController.uploadBrandImage);
 export default router;

@@ -34,9 +34,6 @@ const findBrandById = async (
 
 const createBrand = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.file) {
-      return res.status(400).send("No file uploaded.");
-    }
     const payload = req.body;
     const brand = await brandsService.createBrandRecord(payload);
     sendJsonSuccess(res, "success", 201)(brand);
@@ -67,10 +64,42 @@ const deleteBrand = async (req: Request, res: Response, next: NextFunction) => {
   sendJsonSuccess(res, "success")(brand);
 };
 
+const storage = multer.diskStorage({
+  destination: "src/uploads/",
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const upload = multer({ storage });
+
+const uploadBrandImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    upload.single("file")(req, res, async (err) => {
+      const file = req.file as Express.Multer.File;
+      if (!file) {
+        res.status(400).send("No file uploaded");
+      }
+    });
+
+    sendJsonSuccess(res, "success");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   allBrands,
   findBrandById,
   createBrand,
   updateBrandById,
   deleteBrand,
+  uploadBrandImage,
 };
