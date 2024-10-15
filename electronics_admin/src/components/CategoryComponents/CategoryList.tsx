@@ -286,7 +286,7 @@ function CategoryList() {
                     className='inline-flex items-center'
                     defaultCurrent={1}
                     onChange={(page) => {
-                      navigate(`/categories?page=${page}`);
+                      navigate(`/category?page=${page}`);
                     }}
                     total={getAllCategory?.data?.pagination.totalRecords || 0}
                     pageSize={getAllCategory?.data?.pagination.limit || 10}
