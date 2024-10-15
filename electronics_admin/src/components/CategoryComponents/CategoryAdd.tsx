@@ -14,8 +14,8 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../lib/axiosClient";
-import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 
 interface ICategory {
   category_name?: string;
@@ -27,11 +27,9 @@ interface ICategory {
 }
 
 function CategoryAdd() {
-  const navigate = useNavigate();
-
   const [formCreate] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const navigate = useNavigate();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const fetchAddCategory = async (payload: ICategory) => {
@@ -86,7 +84,8 @@ function CategoryAdd() {
     onSuccess: () => {
       //Clear data form
       formCreate.resetFields();
-      navigate("/category?msg=success");
+      setFileList([]);
+      navigate("/category", { state: { reload: true } });
     },
     onError: () => {
       messageApi.open({
@@ -96,8 +95,17 @@ function CategoryAdd() {
     },
   });
 
+  const generateSlug = (category_name: string) => {
+    return category_name
+      .toLowerCase() // Convert to lowercase
+      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with hyphens
+      .replace(/(^-|-$)+/g, ""); // Remove leading/trailing hyphens
+  };
   // Submit Category create
   const onFinishAdd = async (values: ICategory) => {
+    if (!values.slug) {
+      values.slug = generateSlug(String(values.category_name));
+    }
     if (fileList.length === 0) {
       createMutationCategory.mutate(values);
     } else {
@@ -161,6 +169,20 @@ function CategoryAdd() {
             </label>
           </Form.Item>
           <Form.Item
+            label={
+              <span className='text-gray-700 dark:text-gray-400'>
+                Đường dẫn
+              </span>
+            }
+            name='slug'
+            rules={[{ max: 50, message: "Độ dài ko được quá 50 ký tự" }]}
+          >
+            <Input
+              className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
+              type='string'
+            ></Input>
+          </Form.Item>
+          <Form.Item
             name='description'
             rules={[{ max: 500, message: "Độ dài ko được quá 500 ký tự" }]}
           >
@@ -173,48 +195,35 @@ function CategoryAdd() {
             </label>
           </Form.Item>
           <Form.Item
-            name='slug'
+            label={
+              <span className='text-gray-700 dark:text-gray-400'>Thứ tự</span>
+            }
+            name='order'
             rules={[{ max: 50, message: "Độ dài ko được quá 50 ký tự" }]}
           >
-            <label className='block mt-4 text-sm'>
-              <span className='text-gray-700 dark:text-gray-400'>
-                Đường dẫn
-              </span>
-              <Input
-                className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                type='string'
-              ></Input>
-            </label>
+            <Input
+              className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
+              type='number'
+            ></Input>
           </Form.Item>
           <Form.Item
             label={
               <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                Vai trò
+                Trạng thái
               </span>
             }
             name='isActive'
           >
             <Radio.Group>
               <Radio className='text-gray-700 dark:text-gray-400' value={true}>
-                Hoạt động
+                Kích hoạt
               </Radio>
               <Radio className='text-gray-700 dark:text-gray-400' value={false}>
-                Ko hoạt động
+                Hủy kích hoạt
               </Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
-            name='order'
-            rules={[{ max: 50, message: "Độ dài ko được quá 50 ký tự" }]}
-          >
-            <label className='block mt-4 text-sm'>
-              <span className='text-gray-700 dark:text-gray-400'>Thứ tự</span>
-              <Input
-                className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                type='number'
-              ></Input>
-            </label>
-          </Form.Item>
+
           <Form.Item
             label={
               <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>

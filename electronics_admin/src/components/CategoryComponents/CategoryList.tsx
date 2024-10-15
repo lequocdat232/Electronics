@@ -1,11 +1,11 @@
 import { SETTINGS } from "../../constants/settings";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { axiosClient } from "../../lib/axiosClient";
 import { Helmet } from "react-helmet-async";
-import { Form, Button, message, Input, Pagination } from "antd";
-import { FaLock } from "react-icons/fa";
+import { Form, Button, message, Input, Pagination, Spin } from "antd";
+import { FaEarthAmericas } from "react-icons/fa6";
 
 interface TCategory {
   _id: number;
@@ -17,6 +17,12 @@ interface TCategory {
   isActive: boolean;
 }
 
+interface CategoriesResponse {
+  data: {
+    categories_list: TCategory[];
+  };
+}
+
 interface TFilter {
   keyword: string;
   name: string;
@@ -24,6 +30,7 @@ interface TFilter {
 }
 
 function CategoryList() {
+  const location = useLocation();
   const [messageApi, contextHolder] = message.useMessage();
   const [params] = useSearchParams();
   const [formSearch] = Form.useForm();
@@ -36,6 +43,7 @@ function CategoryList() {
   const slug = slug_category ? slug_category : null;
   const msg = params.get("msg");
   const navigate = useNavigate();
+  const [categories, setCategories] = useState<CategoriesResponse | null>(null);
 
   const onFinishSearch = async (values: TFilter) => {
     const { keyword, slug } = values;
@@ -62,13 +70,24 @@ function CategoryList() {
     }
     url += `page=${page}&limit=${limit}`;
     const response = await axiosClient.get(url);
+    setCategories(response.data);
     return response.data.data;
   };
+
+  useEffect(() => {
+    // If state is passed, reload the list
+    if (location.state?.reload) {
+      // Trigger your fetchCategories function here to reload data
+      fetchCategories();
+    }
+  }, [location.state]);
 
   const getAllCategory = useQuery({
     queryKey: ["categories", page, name, slug],
     queryFn: fetchCategories,
   });
+
+  const { isLoading, error } = getAllCategory;
   const hasShownMessageRef = useRef(false);
   useEffect(() => {
     if (msg && msg !== null && !hasShownMessageRef.current) {
@@ -106,7 +125,7 @@ function CategoryList() {
 
       messageApi.open({
         type: "success",
-        content: "Xóa thành viên thành công!",
+        content: "Xóa danh mục thành công!",
       });
     },
     onError: () => {
@@ -146,14 +165,11 @@ function CategoryList() {
             >
               <div className='grid gid-cols-12 md:grid-cols-4 gap-[15px]'>
                 <Form.Item name='keyword'>
-                  <Input placeholder='Nhập tên' />
-                </Form.Item>
-                <Form.Item name='slug'>
-                  <Input placeholder='Nhập đường dẫn' />
+                  <Input placeholder='Nhập tên danh mục' />
                 </Form.Item>
                 <Form.Item>
                   <Button
-                    className='w-[120px] my-3 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple'
+                    className='w-[120px] px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple'
                     type='primary'
                     htmlType='submit'
                   >
@@ -162,120 +178,127 @@ function CategoryList() {
                 </Form.Item>
               </div>
             </Form>
-            <table className='w-full whitespace-no-wrap'>
-              <thead>
-                <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
-                  <th className='px-4 py-3'>Ảnh</th>
-                  <th className='px-4 py-3'>Tên danh mục</th>
-                  <th className='px-4 py-3'>Mô tả</th>
-                  <th className='px-4 py-3'>Đường dẫn</th>
-                  <th className='px-4 py-3'>Trạng thái</th>
-                  <th className='px-4 py-3'>Thứ tự</th>
-                  <th className='px-4 py-3'>Sửa</th>
-                  <th className='px-4 py-3'>Xóa</th>
-                </tr>
-              </thead>
-              <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
-                {getAllCategory?.data?.categories_list.length > 0 ? (
-                  getAllCategory?.data?.categories_list.map(
-                    (item: TCategory, i: number) => {
-                      return (
-                        <tr
-                          key={i}
-                          className='text-gray-700 dark:text-gray-400'
-                        >
-                          <td className='px-4 py-3'>
-                            {item.imageUrl && item.imageUrl !== null ? (
-                              <img
-                                className='w-[40px] h-[40px] rounded-full object-cover'
-                                src={`${SETTINGS.URL_IMAGE}/${item.imageUrl}`}
-                                alt={item.imageUrl}
-                              />
-                            ) : (
-                              <img
-                                className='w-[40px] h-[40px] rounded-full object-cover'
-                                src='/images/noavatar.png'
-                                alt={item.imageUrl}
-                              />
-                            )}
-                          </td>
-                          <td className='px-4 py-3 text-sm'>
-                            {item.category_name}
-                          </td>
-                          <td className='px-4 py-3 text-xs'>
-                            {item.description}
-                          </td>
-                          <td className='px-4 py-3 text-xs'>{item.slug}</td>
-                          <td className='px-4 py-3 text-sm '>
-                            {item.isActive ? (
-                              <FaLock
-                                className='text-green-500 cursor-pointer m-auto'
-                                title='Đang kích hoạt'
-                              />
-                            ) : (
-                              <FaLock
-                                className='text-red-500 cursor-pointer m-auto'
-                                title='Tài khoản bị khóa'
-                              />
-                            )}
-                          </td>
-                          <td className='px-4 py-3 text-xs'>{item.order}</td>
-
-                          <td className='px-4 py-3'>
-                            <div className='flex items-center space-x-4 text-sm'>
-                              <button
-                                onClick={() => {
-                                  navigate(`/category/${item._id}`);
-                                }}
-                                className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
-                                aria-label='Edit'
-                              >
-                                <svg
-                                  className='w-5 h-5'
-                                  aria-hidden='true'
-                                  fill='currentColor'
-                                  viewBox='0 0 20 20'
-                                >
-                                  <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
-                                </svg>
-                              </button>
-                              <button
-                                onClick={() => {
-                                  handleDelete(String(item._id));
-                                }}
-                                className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
-                                aria-label='Delete'
-                              >
-                                <svg
-                                  className='w-5 h-5'
-                                  aria-hidden='true'
-                                  fill='currentColor'
-                                  viewBox='0 0 20 20'
-                                >
-                                  <path
-                                    fillRule='evenodd'
-                                    d='M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z'
-                                    clipRule='evenodd'
-                                  ></path>
-                                </svg>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )
-                ) : (
-                  <tr className='text-gray-700 dark:text-gray-400'>
-                    <td colSpan={7} className='text-center py-3'>
-                      {keyword != null || name != null || slug != null
-                        ? "Không tìm thấy"
-                        : "Dữ liệu đang được cập nhật"}
-                    </td>
+            <Spin spinning={isLoading}>
+              <table className='w-full whitespace-no-wrap'>
+                <thead>
+                  <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
+                    <th className='px-4 py-3'>Ảnh</th>
+                    <th className='px-4 py-3'>Tên danh mục</th>
+                    <th className='px-4 py-3'>Đường dẫn</th>
+                    <th className='px-4 py-3'>Mô tả</th>
+                    <th className='px-4 py-3'>Thứ tự</th>
+                    <th className='px-4 py-3'>Trạng thái</th>
+                    <th className='px-4 py-3'>Sửa</th>
+                    <th className='px-4 py-3'>Xóa</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
+                  {categories &&
+                  categories?.data?.categories_list.length > 0 ? (
+                    categories?.data?.categories_list.map(
+                      (item: TCategory, i: number) => {
+                        return (
+                          <tr
+                            key={i}
+                            className='text-gray-700 dark:text-gray-400'
+                          >
+                            <td className='px-4 py-3'>
+                              {item.imageUrl && item.imageUrl !== null ? (
+                                <img
+                                  className='w-[40px] h-[40px] rounded-full object-cover'
+                                  src={`${SETTINGS.URL_IMAGE}/${item.imageUrl}`}
+                                  alt={item.imageUrl}
+                                />
+                              ) : (
+                                <img
+                                  className='w-[40px] h-[40px] rounded-full object-cover'
+                                  src='/images/noavatar.png'
+                                  alt={item.imageUrl}
+                                />
+                              )}
+                            </td>
+                            <td className='px-4 py-3 text-sm'>
+                              {item.category_name}
+                            </td>
+                            <td className='px-4 py-3 text-xs'>{item.slug}</td>
+                            <td className='px-4 py-3 text-xs'>
+                              {item.description}
+                            </td>
+                            <td className='px-4 py-3 text-xs'>{item.order}</td>
+                            <td className='px-4 py-3 text-sm '>
+                              {item.isActive ? (
+                                <FaEarthAmericas
+                                  className='text-green-500 cursor-pointer m-auto'
+                                  title='Đang kích hoạt'
+                                />
+                              ) : (
+                                <FaEarthAmericas
+                                  className='text-red-500 cursor-pointer m-auto'
+                                  title='Tài khoản bị khóa'
+                                />
+                              )}
+                            </td>
+                            <td className='px-4 py-3'>
+                              <div className='flex items-center space-x-4 text-sm'>
+                                <button
+                                  onClick={() => {
+                                    navigate(`/category/${item._id}`);
+                                  }}
+                                  className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                  aria-label='Edit'
+                                >
+                                  <svg
+                                    className='w-5 h-5'
+                                    aria-hidden='true'
+                                    fill='currentColor'
+                                    viewBox='0 0 20 20'
+                                  >
+                                    <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                            <td className='px-4 py-3'>
+                              <div className='flex items-center space-x-4 text-sm'>
+                                <button
+                                  onClick={() => {
+                                    handleDelete(String(item._id));
+                                  }}
+                                  className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                  aria-label='Delete'
+                                >
+                                  <svg
+                                    className='w-5 h-5'
+                                    aria-hidden='true'
+                                    fill='currentColor'
+                                    viewBox='0 0 20 20'
+                                  >
+                                    <path
+                                      fillRule='evenodd'
+                                      d='M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z'
+                                      clipRule='evenodd'
+                                    ></path>
+                                  </svg>
+                                </button>{" "}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )
+                  ) : (
+                    <tr className='text-gray-700 dark:text-gray-400'>
+                      <td colSpan={7} className='text-center py-3'>
+                        {keyword != null || name != null || slug != null
+                          ? "Không tìm thấy"
+                          : "Dữ liệu đang được cập nhật"}
+                      </td>
+                    </tr>
+                  )}{" "}
+                </tbody>
+              </table>
+            </Spin>
           </div>
           <div className='grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800'>
             <span className='flex col-span-12 mt-2 m-auto'>
@@ -284,7 +307,6 @@ function CategoryList() {
                   getAllCategory?.data?.pagination.limit && (
                   <Pagination
                     className='inline-flex items-center'
-                    defaultCurrent={1}
                     onChange={(page) => {
                       navigate(`/category?page=${page}`);
                     }}

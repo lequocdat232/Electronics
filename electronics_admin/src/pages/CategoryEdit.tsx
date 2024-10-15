@@ -40,7 +40,7 @@ function CategoryEdit() {
   };
 
   const getCategoryById = useQuery({
-    queryKey: ["Category", id],
+    queryKey: ["category", id],
     queryFn: () => fetchCategoryById(id!),
     enabled: !!id,
   });
@@ -111,13 +111,13 @@ function CategoryEdit() {
       });
       messageApi.open({
         type: "success",
-        content: "Cập nhật thành viên thành công!",
+        content: "Cập nhật danh mục thành công!",
       });
     },
     onError: () => {
       messageApi.open({
         type: "error",
-        content: "Cập nhật thành viên lỗi!",
+        content: "Cập nhật danh mục lỗi!",
       });
     },
   });
@@ -129,7 +129,7 @@ function CategoryEdit() {
       const resulUpload = await handleUpload(fileList[0]);
       if (resulUpload !== null) {
         const info_Category = { ...values, imageUrl: resulUpload };
-        // Gọi api để thêm thành viên
+        // Gọi api để thêm Danh mục
         updateMutationCategory.mutate(info_Category);
       }
     }
@@ -221,28 +221,29 @@ function CategoryEdit() {
                       },
                     ]}
                   >
-                    <Input
-                      disabled
-                      className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                    />
+                    <Input className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input' />
                   </Form.Item>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
                   <Form.Item
-                    name='order'
-                    rules={[
-                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
-                    ]}
-                  >
-                    <label className='block mt-4 text-sm'>
-                      <span className='text-gray-700 dark:text-gray-400'>
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
                         Thứ tự
                       </span>
-                      <Input
-                        className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                        type='number'
-                      ></Input>
-                    </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập thứ tự",
+                      },
+                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
+                    ]}
+                    name='order'
+                  >
+                    <Input
+                      className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
+                      type='number'
+                    ></Input>
                   </Form.Item>
                 </div>
                 <div className='mt-2'>
@@ -272,12 +273,12 @@ function CategoryEdit() {
                   <img
                     className='w-[100px] h-[100px] object-cover mb-2'
                     src={
-                      getCategoryById.data?.imgUrl &&
-                      getCategoryById.data?.imgUrl !== null
-                        ? `${SETTINGS.URL_IMAGE}/${getCategoryById.data?.imgUrl}`
+                      getCategoryById.data?.imageUrl &&
+                      getCategoryById.data?.imageUrl !== null
+                        ? `${SETTINGS.URL_IMAGE}/${getCategoryById.data?.imageUrl}`
                         : `/images/noavatar.png`
                     }
-                    alt={getCategoryById.data?.fullname}
+                    alt={getCategoryById.data?.imageUrl}
                   />
                   <Form.Item
                     label={
