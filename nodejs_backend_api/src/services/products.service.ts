@@ -11,21 +11,25 @@ const findAllProduct = async (query: any) => {
     const limit = limit_str ? parseInt(limit_str as string) : 10;
 
     /* Lọc theo từng điều kiện */
-    let objectFilters: any = {};
+    
+    let objectFilters : any = {};
     // Lọc theo danh mục sản phẩm
-    if (query.category && query.category != '') {
-        objectFilters = { ...objectFilters, category: query.category }
+    if(query.category && query.category != ''){
+        objectFilters = {...objectFilters, category: query.category}
+    }
+    if(query.brand && query.brand != ''){
+        objectFilters = {...objectFilters, brand: query.brand}
     }
     // Lọc theo danh tên sản phẩm
-    if (query.keyword && query.keyword != '') {
-        objectFilters = { ...objectFilters, product_name: new RegExp(query.keyword, 'i') }
+    if(query.keyword && query.keyword != ''){
+        objectFilters = {...objectFilters, product_name: new RegExp(query.keyword, 'i')}
     }
 
 
 
     /* Sắp xếp */
     let objSort: any = {};
-    const sortBy = query.sort || 'updateAt'; // Mặc định sắp xếp theo ngày tạo giảm dần
+    const sortBy = query.sort || 'createdAt'; // Mặc định sắp xếp theo ngày tạo giảm dần
     const orderBy = query.order && query.order == 'ASC' ? 1 : -1
     objSort = { ...objSort, [sortBy]: orderBy } // Thêm phần tử sắp xếp động vào object {}
 
@@ -66,8 +70,6 @@ const findAllProduct = async (query: any) => {
 }
 
 //  * get Single Product by ID
-
-
 const findOneProductId = async (id: string) => {
     const product = await Product
         .findById(id, '-__v -id') // có thể liệt kê select vào tham số thứ 2 của hàm
@@ -94,7 +96,7 @@ const createNewProduct = async (body: any) => {
         slug: body.slug,
         order: body.order,
         isBest: body.isBest,
-        isRecentlyAdded: body.isNew,
+        isRecentlyAdded: body.isRecentlyAdded,
         isShowHome: body.isShowHome,
         isDelete: body.isDelete,
         specifications: body.specifications,
@@ -127,5 +129,5 @@ export default {
     findOneProductId,
     createNewProduct,
     updateProductById,
-    deleteProductById
+    deleteProductById,  
 }

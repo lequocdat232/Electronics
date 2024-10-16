@@ -2,7 +2,7 @@ import { Button, Form, FormProps} from "antd";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Helmet } from 'react-helmet'
+import { Helmet } from "react-helmet-async"
 
 type FieldType = {
   email: string;

@@ -60,5 +60,5 @@ export default {
   findOneProductId,
   createDocument,
   updateById,
-  deleteById
+  deleteById,
 }

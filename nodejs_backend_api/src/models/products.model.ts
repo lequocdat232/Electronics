@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import mongooseLeanVirtuals  from 'mongoose-lean-virtuals'
+import { buildSlug } from '../helpers/buildSlug';
 /* Khởi tạo một Schema */
 
 const productSchema = new Schema({
@@ -93,6 +94,23 @@ const productSchema = new Schema({
   timestamps: true, //Tạo tự động thêm 2 trường createAt, updateAt
 }
 )
+productSchema.set('toJSON', { virtuals: true });
+// Virtuals in console.log()
+productSchema.set('toObject', { virtuals: true });
+
+productSchema.plugin(mongooseLeanVirtuals);
+
+//middleware
+// Can thiệp vào dữ liệu trước khi ghi vào database
+productSchema.pre('save',  function (next) {
+  const product = this
+  /* tự động tạo slug từ product_name */
+  if(product.product_name && product.slug == undefined){
+    product.slug = buildSlug(product.product_name)
+  } 
+
+  next();
+});
 //Export một Model
 const Product = model('Product', productSchema);
 export default Product;

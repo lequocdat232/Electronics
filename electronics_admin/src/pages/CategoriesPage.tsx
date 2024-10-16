@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet-async"
 import CategoryAdd from "../components/CategoryComponents/CategoryAdd"
 import CategoryList from "../components/CategoryComponents/CategoryList"
 
