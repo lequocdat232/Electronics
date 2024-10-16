@@ -200,7 +200,7 @@ function CategoryEdit() {
                         Mô tả
                       </span>
                     }
-                    rules={[{ required: true, message: "Vui lòng nhập họ" }]}
+                    rules={[{ required: true, message: "Vui lòng mô tả" }]}
                   >
                     <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -213,13 +213,6 @@ function CategoryEdit() {
                       </span>
                     }
                     name='slug'
-                    rules={[
-                      { required: true, message: "Vui lòng nhập đường dẫn" },
-                      {
-                        type: "string",
-                        message: "Vui lòng nhập đúng định dạng email",
-                      },
-                    ]}
                   >
                     <Input className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input' />
                   </Form.Item>
@@ -236,11 +229,11 @@ function CategoryEdit() {
                         required: true,
                         message: "Vui lòng nhập thứ tự",
                       },
-                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
                     ]}
                     name='order'
                   >
                     <Input
+                      min={0}
                       className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
                       type='number'
                     ></Input>
@@ -248,7 +241,7 @@ function CategoryEdit() {
                 </div>
                 <div className='mt-2'>
                   <Form.Item name='isActive'>
-                    <Radio.Group name='isActive'>
+                    <Radio.Group name='isActive' defaultValue={true}>
                       <Radio
                         value={true}
                         className='inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'

@@ -16,6 +16,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../lib/axiosClient";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
+import TextArea from "antd/es/input/TextArea";
 
 interface ICategory {
   category_name?: string;
@@ -96,10 +97,7 @@ function CategoryAdd() {
   });
 
   const generateSlug = (category_name: string) => {
-    return category_name
-      .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with hyphens
-      .replace(/(^-|-$)+/g, ""); // Remove leading/trailing hyphens
+    return category_name.toLowerCase(); // Convert to lowercase // Remove leading/trailing hyphens
   };
   // Submit Category create
   const onFinishAdd = async (values: ICategory) => {
@@ -188,10 +186,10 @@ function CategoryAdd() {
           >
             <label className='block mt-4 text-sm'>
               <span className='text-gray-700 dark:text-gray-400'>Mô tả</span>
-              <Input
+              <TextArea
+                rows={3}
                 className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                type='string'
-              ></Input>
+              ></TextArea>
             </label>
           </Form.Item>
           <Form.Item
@@ -214,7 +212,7 @@ function CategoryAdd() {
             }
             name='isActive'
           >
-            <Radio.Group>
+            <Radio.Group defaultValue={true}>
               <Radio className='text-gray-700 dark:text-gray-400' value={true}>
                 Kích hoạt
               </Radio>

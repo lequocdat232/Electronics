@@ -1,11 +1,12 @@
 import { SETTINGS } from "../../constants/settings";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { axiosClient } from "../../lib/axiosClient";
 import { Helmet } from "react-helmet-async";
 import { Form, Button, message, Input, Pagination, Spin } from "antd";
 import { FaEarthAmericas } from "react-icons/fa6";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface TCategory {
   _id: number;
@@ -60,7 +61,7 @@ function CategoryList() {
   const onFinishFailedSearch = async (errorInfo: unknown) => {
     console.log("ErrorInfo", errorInfo);
   };
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     let url = `${SETTINGS.URL_API}/v1/categories?`;
     if (name) {
       url += `keyword=${name}&`;
@@ -72,7 +73,7 @@ function CategoryList() {
     const response = await axiosClient.get(url);
     setCategories(response.data);
     return response.data.data;
-  };
+  }, [name, page, slug]);
 
   useEffect(() => {
     // If state is passed, reload the list
@@ -80,14 +81,14 @@ function CategoryList() {
       // Trigger your fetchCategories function here to reload data
       fetchCategories();
     }
-  }, [location.state]);
+  }, [location.state, fetchCategories]);
 
   const getAllCategory = useQuery({
     queryKey: ["categories", page, name, slug],
     queryFn: fetchCategories,
   });
 
-  const { isLoading, error } = getAllCategory;
+  const { isLoading } = getAllCategory;
   const hasShownMessageRef = useRef(false);
   useEffect(() => {
     if (msg && msg !== null && !hasShownMessageRef.current) {
@@ -106,8 +107,9 @@ function CategoryList() {
       !params.has("keyword") &&
       !params.has("slug") &&
       !params.has("name")
-    )
+    ) {
       navigate("/category");
+    }
   }, [page, navigate, params]);
 
   const queryClient = useQueryClient();
@@ -178,7 +180,11 @@ function CategoryList() {
                 </Form.Item>
               </div>
             </Form>
-            <Spin spinning={isLoading}>
+
+            <Spin
+              spinning={isLoading}
+              indicator={<LoadingOutlined style={{ fontSize: 48 }} />}
+            >
               <table className='w-full whitespace-no-wrap'>
                 <thead>
                   <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
@@ -235,7 +241,7 @@ function CategoryList() {
                               ) : (
                                 <FaEarthAmericas
                                   className='text-red-500 cursor-pointer m-auto'
-                                  title='Tài khoản bị khóa'
+                                  title='Bị khóa'
                                 />
                               )}
                             </td>
@@ -306,9 +312,10 @@ function CategoryList() {
                 {getAllCategory?.data?.pagination.totalRecords >
                   getAllCategory?.data?.pagination.limit && (
                   <Pagination
+                    current={page}
                     className='inline-flex items-center'
-                    onChange={(page) => {
-                      navigate(`/category?page=${page}`);
+                    onChange={(newPage) => {
+                      navigate(`/category?page=${newPage}`);
                     }}
                     total={getAllCategory?.data?.pagination.totalRecords || 0}
                     pageSize={getAllCategory?.data?.pagination.limit || 10}
