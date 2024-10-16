@@ -1,6 +1,8 @@
 import app from './src/app'
 import mongoose from "mongoose";
 import { globalConfig } from './src/constants/configs';
+import Post from './src/models/post.model';
+import {faker} from "@faker-js/faker"
 /// Start the server
 
 const PORT = globalConfig.PORT
@@ -18,3 +20,5 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Example app listening on port http://localhost:${PORT}`)
 })
+
+
