@@ -19,17 +19,24 @@ type TPost = {
   updatedAt: Date; // Ngày cập nhật bài viết
 };
 
-const findAll = async ({ page, limit }) => {
-  const pageNumber = parseInt(page) || 1;
-  const limitNumber = parseInt(limit) || 10;
+const findAll = async ({ page, limit }: any) => {
+  const pageNumber = Math.max(parseInt(page) || 1, 1);
+  const limitNumber = Math.max(parseInt(limit) || 10, 1);
   const skip = (pageNumber - 1) * limitNumber;
 
   const posts = await Post.find()
-    .skip(skip)  // Bỏ qua các bản ghi trước đó
-    .limit(limitNumber)  // Giới hạn số lượng bản ghi trả về
+    .skip(skip) // Bỏ qua các bản ghi trước đó
+    .limit(limitNumber); // Giới hạn số lượng bản ghi trả về
 
-  return posts;
+  const totalRecords = await Post.countDocuments(); // Đếm tổng số bản ghi
+
+  return {
+    posts,
+    totalRecords, // Trả về tổng số bản ghi
+  };
 };
+
+
 const countAll = async () => {
   const totalRecords = await Post.countDocuments();
   return totalRecords;
@@ -58,26 +65,8 @@ const deleteById = async (id: string) => {
 
 const createDocument = async (payloads: TPost) => {
   const post = await Post.create(payloads);
-
   return post;
 };
-// const createDocument = async (body: any) => {
-//   // Kiểm tra xem title, content và category có tồn tại không
-//   if (!body.title || !body.content || !body.category) {
-//     throw new Error("Missing required fields: title, content, or category");
-//   }
-
-//   const payloads = {
-//     title: body.title,
-//     content: body.content,
-//     category: body.category,
-//     comments: body.comments || [], // Nếu không có comments, mặc định là mảng rỗng
-//   };
-
-//   // Tạo bài viết mới
-//   const post = await Post.create(payloads);
-//   return post;
-// };
 
 export default {
   findAll,

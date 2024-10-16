@@ -4,25 +4,27 @@ import { sendJsonErrors } from "../helpers/responseHandler";
 
 const findAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { page = 1, limit = 10 } = req.query; // Page mặc định là 1, limit mặc định là 10
+    // Lấy page và limit từ query, ép kiểu về số nguyên với giá trị mặc định
+    const page = Math.max(parseInt(req.query.page as string) || 1, 1); // Đảm bảo page không nhỏ hơn 1
+    const limit = Math.max(parseInt(req.query.limit as string) || 10, 1); // Đảm bảo limit không nhỏ hơn 1
 
-    const posts = await postService.findAll({ page, limit });
+    // Lấy danh sách bài viết từ service
+    const { posts, totalRecords } = await postService.findAll({ page, limit });
 
-    // Tổng số bài viết (totalRecords) cho tất cả các bài viết
-    const totalRecords = await postService.countAll();
-
+    // Trả về phản hồi
     res.status(200).json({
       status: "success",
       message: "Posts retrieved successfully",
       data: posts,
       totalRecords, // Trả về tổng số bài viết
-      currentPage: parseInt(page), // Trang hiện tại
+      currentPage: page, // Trang hiện tại
       totalPages: Math.ceil(totalRecords / limit), // Tổng số trang
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 const findById = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -70,10 +72,19 @@ const createDocument = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await postService.createDocument(req.body);
-    return res.status(200).json({
-      message: "Posts fetched successfully",
-      data: posts,
+    const { title, content, category } = req.body;
+    if (!title || !content || !category) {
+      return res.status(400).json({
+        status: "error",
+        message: "Missing required fields: title, content, or category",
+      });
+    }
+    const post = await postService.createDocument(req.body);
+
+    return res.status(201).json({
+      status: "success",
+      message: "Post created successfully",
+      data: post,
     });
   } catch (error) {
     next(sendJsonErrors(res, error));
