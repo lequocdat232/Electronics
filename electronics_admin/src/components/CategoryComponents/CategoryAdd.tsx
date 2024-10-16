@@ -97,7 +97,7 @@ function CategoryAdd() {
   });
 
   const generateSlug = (category_name: string) => {
-    return category_name.toLowerCase(); // Convert to lowercase // Remove leading/trailing hyphens
+    return category_name.toLowerCase().replace(/\s+/g, "-"); // Convert to lowercase // Remove leading/trailing hyphens
   };
   // Submit Category create
   const onFinishAdd = async (values: ICategory) => {

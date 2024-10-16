@@ -121,8 +121,14 @@ function CategoryEdit() {
       });
     },
   });
+  const generateSlug = (category_name: string) => {
+    return category_name.toLowerCase().replace(/\s+/g, "-"); // Convert to lowercase // Remove leading/trailing hyphens
+  };
 
   const onFinishUpdate = async (values: ICategory) => {
+    if (!values.slug) {
+      values.slug = generateSlug(String(values.category_name));
+    }
     if (fileList.length === 0) {
       updateMutationCategory.mutate(values);
     } else {
