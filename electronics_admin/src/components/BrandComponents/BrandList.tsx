@@ -1,225 +1,320 @@
-import axios from "axios";
 import { SETTINGS } from "../../constants/settings";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { axiosClient } from "../../lib/axiosClient";
+import { Helmet } from "react-helmet-async";
+import { Form, Button, message, Input, Pagination, Spin } from "antd";
+import { FaEarthAmericas } from "react-icons/fa6";
+import { LoadingOutlined } from "@ant-design/icons";
 
-interface IBrand {
+interface TBrand {
   _id: number;
   brand_name: string;
   description: string;
   slug: string;
-  imageUrl: string;
+  logo_url: string;
   order: number;
   isActive: boolean;
 }
 
+interface BrandsResponse {
+  data: {
+    brands_list: TBrand[];
+  };
+}
+
+interface TFilter {
+  keyword: string;
+  name: string;
+  slug: string;
+}
+
 function BrandList() {
-  const [brands, setbrands] = useState<IBrand[]>([]);
+  const location = useLocation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [params] = useSearchParams();
+  const [formSearch] = Form.useForm();
+  const page_str = params.get("page");
+  const page = page_str ? parseInt(page_str) : 1;
+  const limit = 10;
+  const keyword = params.get("keyword");
+  const name = keyword ? keyword : null;
+  const slug_brand = params.get("slug");
+  const slug = slug_brand ? slug_brand : null;
+  const msg = params.get("msg");
+  const navigate = useNavigate();
+  const [brands, setBrands] = useState<BrandsResponse | null>(null);
 
-  const fetchGroups = async () =>
-    await axios.get(SETTINGS.URL_API + "/v1/brands").then((response) => {
-      console.log(response.data.data.brands_list);
-      return response.data.data.brands_list;
-    });
+  const onFinishSearch = async (values: TFilter) => {
+    const { keyword, slug } = values;
 
-  const { data, isSuccess } = useQuery<IBrand[]>({
-    queryKey: ["brands"],
-    queryFn: fetchGroups,
-  });
+    const queryString = [
+      keyword ? `keyword=${keyword.trim()}` : "",
+      slug ? `slug=${slug.trim()}` : "",
+    ]
+      .filter(Boolean)
+      .join("&");
+
+    navigate(`/brand${queryString ? `?${queryString}` : ""}`);
+  };
+  const onFinishFailedSearch = async (errorInfo: unknown) => {
+    console.log("ErrorInfo", errorInfo);
+  };
+  const fetchBrands = useCallback(async () => {
+    let url = `${SETTINGS.URL_API}/v1/brands?`;
+    if (name) {
+      url += `keyword=${name}&`;
+    }
+    if (slug) {
+      url += `slug=${slug}&`;
+    }
+    url += `page=${page}&limit=${limit}`;
+    const response = await axiosClient.get(url);
+    setBrands(response.data);
+    return response.data.data;
+  }, [name, page, slug]);
 
   useEffect(() => {
-    if (isSuccess && data && Array.isArray(data)) {
-      console.log(data);
-      setbrands(data);
+    // If state is passed, reload the list
+    if (location.state?.reload) {
+      // Trigger your fetchBrands function here to reload data
+      fetchBrands();
     }
-  }, [isSuccess, data, brands]);
+  }, [location.state, fetchBrands]);
+
+  const getAllBrand = useQuery({
+    queryKey: ["Brands", page, name, slug],
+    queryFn: fetchBrands,
+  });
+
+  const { isLoading } = getAllBrand;
+  const hasShownMessageRef = useRef(false);
+  useEffect(() => {
+    if (msg && msg !== null && !hasShownMessageRef.current) {
+      messageApi.open({
+        type: "success",
+        content: "Thêm thành viên thành công!",
+      });
+      hasShownMessageRef.current = true;
+    }
+  }, [msg, messageApi]);
+
+  useEffect(() => {
+    if (
+      page === 1 &&
+      !params.has("msg") &&
+      !params.has("keyword") &&
+      !params.has("slug") &&
+      !params.has("name")
+    ) {
+      navigate("/brand");
+    }
+  }, [page, navigate, params]);
+
+  const queryClient = useQueryClient();
+  const fetchDeleleBrand = async (id: string) => {
+    const url = `${SETTINGS.URL_API}/v1/brands/${id}`;
+    const res = await axiosClient.delete(url);
+    return res.data.data;
+  };
+  const deletebrand = useMutation({
+    mutationFn: fetchDeleleBrand,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["Brands"],
+      });
+
+      messageApi.open({
+        type: "success",
+        content: "Xóa danh mục thành công!",
+      });
+    },
+    onError: () => {
+      messageApi.open({
+        type: "error",
+        content: "Có lỗi trong quá trình xóa!",
+      });
+    },
+  });
+
+  const handleDelete = (itemId: string) => {
+    const confirmed = window.confirm("Bạn có chắc chắn muốn xóa không?");
+    if (confirmed) {
+      deletebrand.mutate(itemId);
+    }
+  };
   return (
-    <div className='col-span-12 md:col-span-7'>
-      <div className='w-full mb-8 overflow-hidden rounded-lg shadow-xs'>
-        <div className='w-full overflow-x-auto'>
-          <table className='w-full whitespace-no-wrap'>
-            <thead>
-              <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
-                <th className='px-4 py-3'>Ảnh</th>
-                <th className='px-4 py-3'>Tên danh mục</th>
-                <th className='px-4 py-3'>Mô tả</th>
-                <th className='px-4 py-3'>Đường dẫn</th>
-                <th className='px-4 py-3'>Đường dẫn ảnh</th>
-                <th className='px-4 py-3'>Trạng thái</th>
-                <th className='px-4 py-3'>Thứ tự</th>
-                <th className='px-4 py-3'>Sửa</th>
-                <th className='px-4 py-3'>Xóa</th>
-              </tr>
-            </thead>
-            <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
-              {Array.isArray(brands) &&
-                brands.map((brand) => (
-                  <tr className='text-gray-700 dark:text-gray-400'>
-                    <td className='px-4 py-3'>
-                      <div className='flex items-center text-sm'>
-                        <div className='relative hidden w-8 h-8 mr-3 rounded-full md:block'>
-                          {/* <img
-                            className='object-cover w-full h-full rounded-full'
-                            src='https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
-                            alt=''
-                            loading='lazy'
-                          /> */}
-                          <div
-                            className='absolute inset-0 rounded-full shadow-inner'
-                            aria-hidden='true'
-                          ></div>
-                        </div>
-                        <div>
-                          <p className='font-semibold'>
-                            <img src={brand.imageUrl} alt='' />
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className='px-4 py-3 text-sm'>{brand.brand_name}</td>
-                    <td className='px-4 py-3 text-xs'>
-                      <span className='py-1 font-semibold leading-tight'>
-                        {brand.description}
-                      </span>
-                    </td>
-                    <td className='px-4 py-3 text-sm'>{brand.slug}</td>
-                    <td className='px-4 py-3 text-sm'>{brand.imageUrl}</td>
-                    {brand.isActive ? (
-                      <td className='px-4 py-3 text-xs bg-green-700'>
-                        "Hoạt động"
-                      </td>
-                    ) : (
-                      <td className='px-4 py-3 text-xs bg-red-700'>
-                        "Ko Hoạt động"
-                      </td>
-                    )}
+    <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>Electronics - Danh mục </title>
+        <link rel='canonical' href={window.location.href} />
+        <meta name='description' content='Danh mục' />
+      </Helmet>
+      {contextHolder}
+      <div className='col-span-12 md:col-span-7'>
+        <div className='w-full mb-8 overflow-hidden rounded-lg shadow-xs'>
+          <div className='w-full overflow-x-auto'>
+            <Form
+              form={formSearch}
+              name='form-search'
+              onFinish={onFinishSearch}
+              onFinishFailed={onFinishFailedSearch}
+              autoComplete='on'
+              layout='vertical'
+            >
+              <div className='grid gid-cols-12 md:grid-cols-4 gap-[15px]'>
+                <Form.Item name='keyword'>
+                  <Input placeholder='Nhập tên danh mục' />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    className='w-[120px] px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple'
+                    type='primary'
+                    htmlType='submit'
+                  >
+                    Lọc
+                  </Button>
+                </Form.Item>
+              </div>
+            </Form>
 
-                    <td className='px-4 py-3 text-xs'>{brand.order}</td>
-                    <td className='px-4 py-3 text-sm'>
-                      <a href={SETTINGS.URL_API + "/v1/brand/" + brand._id}>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          className='w-5 h-5'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          stroke='currentColor'
-                          strokeWidth='2'
-                        >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m5 0H4'
-                          />
-                        </svg>
-                      </a>
-                    </td>
-                    <td className='px-4 py-3 text-sm'>
-                      <a href=''>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          className='w-5 h-5'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          stroke='currentColor'
-                          strokeWidth='2'
-                        >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m5 0H4'
-                          />
-                        </svg>
-                      </a>
-                    </td>
+            <Spin
+              spinning={isLoading}
+              indicator={<LoadingOutlined style={{ fontSize: 48 }} />}
+            >
+              <table className='w-full whitespace-no-wrap'>
+                <thead>
+                  <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
+                    <th className='px-4 py-3'>Ảnh</th>
+                    <th className='px-4 py-3'>Tên danh mục</th>
+                    <th className='px-4 py-3'>Mô tả</th>
+                    <th className='px-4 py-3'>Đường dẫn</th>
+                    <th className='px-4 py-3'>Trạng thái</th>
+                    <th className='px-4 py-3'>Thứ tự</th>
+                    <th className='px-4 py-3'>Sửa</th>
+                    <th className='px-4 py-3'>Xóa</th>
                   </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800'>
-          <span className='flex items-center col-span-3'>
-            Showing 21-30 of 100
-          </span>
-          <span className='col-span-2'></span>
+                </thead>
+                <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
+                  {brands && brands?.data?.brands_list.length > 0 ? (
+                    brands?.data?.brands_list.map((item: TBrand, i: number) => (
+                      <tr className='text-gray-700 dark:text-gray-400' key={i}>
+                        <td className='px-4 py-3'>
+                          {item.logo_url && item.logo_url !== null ? (
+                            <img
+                              className='w-[40px] h-[40px] object-cover'
+                              src={`${SETTINGS.URL_IMAGE}/${item.logo_url}`}
+                              alt={item.logo_url}
+                            />
+                          ) : (
+                            <img
+                              className='w-[40px] h-[40px] object-cover'
+                              src='/images/noavatar.png'
+                              alt={item.logo_url}
+                            />
+                          )}
+                        </td>
+                        <td className='px-4 py-3 text-sm'>{item.brand_name}</td>
+                        <td className='px-4 py-3 text-xs'>
+                          <span className='py-1 font-semibold leading-tight'>
+                            {item.description}
+                          </span>
+                        </td>
+                        <td className='px-4 py-3 text-sm'>{item.slug}</td>
 
-          <span className='flex col-span-4 mt-2 sm:mt-auto sm:justify-end'>
-            <nav aria-label='Table navigation'>
-              <ul className='inline-flex items-center'>
-                <li>
-                  <button
-                    className='px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple'
-                    aria-label='Previous'
-                  >
-                    <svg
-                      aria-hidden='true'
-                      className='w-4 h-4 fill-current'
-                      viewBox='0 0 20 20'
-                    >
-                      <path
-                        d='M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
-                        clip-rule='evenodd'
-                        fill-rule='evenodd'
-                      ></path>
-                    </svg>
-                  </button>
-                </li>
-                <li>
-                  <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                    1
-                  </button>
-                </li>
-                <li>
-                  <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                    2
-                  </button>
-                </li>
-                <li>
-                  <button className='px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                    3
-                  </button>
-                </li>
-                <li>
-                  <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                    4
-                  </button>
-                </li>
-                <li>
-                  <span className='px-3 py-1'>...</span>
-                </li>
-                <li>
-                  <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                    8
-                  </button>
-                </li>
-                <li>
-                  <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                    9
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className='px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple'
-                    aria-label='Next'
-                  >
-                    <svg
-                      className='w-4 h-4 fill-current'
-                      aria-hidden='true'
-                      viewBox='0 0 20 20'
-                    >
-                      <path
-                        d='M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z'
-                        clip-rule='evenodd'
-                        fill-rule='evenodd'
-                      ></path>
-                    </svg>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </span>
+                        <td className='px-4 py-3 text-sm '>
+                          {item.isActive ? (
+                            <FaEarthAmericas
+                              className='text-green-500 cursor-pointer m-auto'
+                              title='Đang kích hoạt'
+                            />
+                          ) : (
+                            <FaEarthAmericas
+                              className='text-red-500 cursor-pointer m-auto'
+                              title='Bị khóa'
+                            />
+                          )}
+                        </td>
+                        <td className='px-4 py-3 text-xs'>{item.order}</td>
+                        <td className='px-4 py-3'>
+                          <div className='flex items-center space-x-4 text-sm'>
+                            <button
+                              onClick={() => {
+                                navigate(`/brand/${item._id}`);
+                              }}
+                              className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                              aria-label='Edit'
+                            >
+                              <svg
+                                className='w-5 h-5'
+                                aria-hidden='true'
+                                fill='currentColor'
+                                viewBox='0 0 20 20'
+                              >
+                                <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                        <td className='px-4 py-3 text-sm'>
+                          <button
+                            onClick={() => handleDelete(String(item._id))}
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              className='w-5 h-5'
+                              fill='none'
+                              viewBox='0 0 24 24'
+                              stroke='currentColor'
+                              strokeWidth='2'
+                            >
+                              <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m5 0H4'
+                              />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className='text-gray-700 dark:text-gray-400'>
+                      <td colSpan={7} className='text-center py-3'>
+                        {keyword != null || name != null || slug != null
+                          ? "Không tìm thấy"
+                          : "Dữ liệu đang được cập nhật"}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </Spin>
+          </div>
+
+          <div className='grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800'>
+            <span className='flex col-span-12 mt-2 m-auto'>
+              <nav aria-label='Table navigation'>
+                {getAllBrand?.data?.pagination.totalRecords >
+                  getAllBrand?.data?.pagination.limit && (
+                  <Pagination
+                    current={page}
+                    className='inline-flex items-center'
+                    onChange={(newPage) => {
+                      navigate(`/brand?page=${newPage}`);
+                    }}
+                    total={getAllBrand?.data?.pagination.totalRecords || 0}
+                    pageSize={getAllBrand?.data?.pagination.limit || 10}
+                  />
+                )}
+              </nav>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

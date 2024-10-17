@@ -212,13 +212,13 @@ function CategoryList() {
                             <td className='px-4 py-3'>
                               {item.imageUrl && item.imageUrl !== null ? (
                                 <img
-                                  className='w-[40px] h-[40px] rounded-full object-cover'
+                                  className='w-[40px] h-[40px] object-cover'
                                   src={`${SETTINGS.URL_IMAGE}/${item.imageUrl}`}
                                   alt={item.imageUrl}
                                 />
                               ) : (
                                 <img
-                                  className='w-[40px] h-[40px] rounded-full object-cover'
+                                  className='w-[40px] h-[40px] object-cover'
                                   src='/images/noavatar.png'
                                   alt={item.imageUrl}
                                 />
