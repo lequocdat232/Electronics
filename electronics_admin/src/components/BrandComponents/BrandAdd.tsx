@@ -154,7 +154,7 @@ function BrandAdd() {
           <Form.Item
             name='brand_name'
             rules={[
-              { required: true, message: "Làm ơn hãy điền tên thương hiệu" },
+              { required: true, message: "Xin hãy điền tên thương hiệu" },
               { max: 50, message: "Độ dài không được quá 50 ký tự" },
               { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
             ]}
@@ -197,6 +197,12 @@ function BrandAdd() {
               <span className='text-gray-700 dark:text-gray-400'>Thứ tự</span>
             }
             name='order'
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập thứ tự hiển thị",
+              },
+            ]}
           >
             <Input
               type='number'
@@ -221,7 +227,6 @@ function BrandAdd() {
               </Radio>
             </Radio.Group>
           </Form.Item>
-
           <Form.Item
             label={
               <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
@@ -233,7 +238,6 @@ function BrandAdd() {
               <Button icon={<UploadOutlined />}>Select File</Button>
             </Upload>
           </Form.Item>
-
           <Button
             className='mt-3 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple'
             type='primary'

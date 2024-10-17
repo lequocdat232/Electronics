@@ -188,10 +188,17 @@ function BrandEdit() {
                     name='brand_name'
                     label={
                       <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                        Tên
+                        Tên thương hiệu
                       </span>
                     }
-                    rules={[{ required: true, message: "Vui lòng nhập tên" }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Xin hãy điền tên thương hiệu",
+                      },
+                      { max: 50, message: "Độ dài không được quá 50 ký tự" },
+                      { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
+                    ]}
                   >
                     <Input
                       placeholder='Nhập tên của bạn'
@@ -206,6 +213,9 @@ function BrandEdit() {
                       </span>
                     }
                     name='slug'
+                    rules={[
+                      { max: 50, message: "Độ dài không được quá 50 ký tự" },
+                    ]}
                   >
                     <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -220,7 +230,7 @@ function BrandEdit() {
                     rules={[
                       {
                         required: true,
-                        message: "Vui lòng nhập thứ tự",
+                        message: "Vui lòng nhập thứ tự hiển thị",
                       },
                     ]}
                     name='order'
@@ -240,7 +250,9 @@ function BrandEdit() {
                         Mô tả
                       </span>
                     }
-                    rules={[{ required: true, message: "Vui lòng mô tả" }]}
+                    rules={[
+                      { max: 500, message: "Độ dài không được quá 500 ký tự" },
+                    ]}
                   >
                     <TextArea className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -253,7 +265,7 @@ function BrandEdit() {
                         className='inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                       >
                         <span className='ml-2 text-gray-600 dark:text-gray-400'>
-                          Công khai
+                          Kích hoạt
                         </span>
                       </Radio>
 
@@ -262,7 +274,7 @@ function BrandEdit() {
                         className='ml-6 inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                       >
                         <span className='ml-2 text-gray-600 dark:text-gray-400'>
-                          Không công khai
+                          Không kích hoạt
                         </span>
                       </Radio>
                     </Radio.Group>

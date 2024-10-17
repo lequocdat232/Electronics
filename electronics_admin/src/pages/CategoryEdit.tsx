@@ -188,13 +188,17 @@ function CategoryEdit() {
                     name='category_name'
                     label={
                       <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                        Tên
+                        Tên danh mục
                       </span>
                     }
-                    rules={[{ required: true, message: "Vui lòng nhập tên" }]}
+                    rules={[
+                      { required: true, message: "Vui lòng nhập tên danh mục" },
+                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
+                      { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
+                    ]}
                   >
                     <Input
-                      placeholder='Nhập tên của bạn'
+                      placeholder='Nhập tên danh mục'
                       className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                     />
                   </Form.Item>
@@ -206,6 +210,9 @@ function CategoryEdit() {
                       </span>
                     }
                     name='slug'
+                    rules={[
+                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
+                    ]}
                   >
                     <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -240,7 +247,9 @@ function CategoryEdit() {
                         Mô tả
                       </span>
                     }
-                    rules={[{ required: true, message: "Vui lòng mô tả" }]}
+                    rules={[
+                      { max: 500, message: "Độ dài ko được quá 500 ký tự" },
+                    ]}
                   >
                     <TextArea className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>

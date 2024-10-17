@@ -149,7 +149,7 @@ function CategoryAdd() {
           <Form.Item
             name='category_name'
             rules={[
-              { required: true, message: "làm ơn hãy điền tên danh mục" },
+              { required: true, message: "Xin hãy điền tên danh mục" },
               { max: 50, message: "Độ dài ko được quá 50 ký tự" },
               { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
             ]}
