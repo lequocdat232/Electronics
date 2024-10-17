@@ -16,6 +16,7 @@ import {
 import { useParams } from "react-router-dom";
 import { axiosClient } from "../lib/axiosClient";
 import { UploadOutlined } from "@ant-design/icons";
+import TextArea from "antd/es/input/TextArea";
 // import { UploadProps } from "antd/es/upload";
 // import { UploadOutlined } from "@ant-design/icons";
 interface ICategory {
@@ -184,7 +185,7 @@ function CategoryEdit() {
                 onFinishFailed={onFinishFailedUpdate}
                 autoComplete='off'
               >
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
+                <div className='grid grid-cols md:grid-cols-2 gap-[15px]'>
                   <Form.Item
                     name='category_name'
                     label={
@@ -199,19 +200,7 @@ function CategoryEdit() {
                       className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                     />
                   </Form.Item>
-                  <Form.Item
-                    name='description'
-                    label={
-                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                        Mô tả
-                      </span>
-                    }
-                    rules={[{ required: true, message: "Vui lòng mô tả" }]}
-                  >
-                    <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
-                  </Form.Item>
-                </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
+
                   <Form.Item
                     label={
                       <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
@@ -220,7 +209,7 @@ function CategoryEdit() {
                     }
                     name='slug'
                   >
-                    <Input className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input' />
+                    <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
@@ -245,6 +234,19 @@ function CategoryEdit() {
                     ></Input>
                   </Form.Item>
                 </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
+                  <Form.Item
+                    name='description'
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
+                        Mô tả
+                      </span>
+                    }
+                    rules={[{ required: true, message: "Vui lòng mô tả" }]}
+                  >
+                    <TextArea className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
+                  </Form.Item>
+                </div>
                 <div className='mt-2'>
                   <Form.Item name='isActive'>
                     <Radio.Group name='isActive' defaultValue={true}>
@@ -253,7 +255,7 @@ function CategoryEdit() {
                         className='inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                       >
                         <span className='ml-2 text-gray-600 dark:text-gray-400'>
-                          Kích hoạt
+                          Công khai
                         </span>
                       </Radio>
 
@@ -262,12 +264,13 @@ function CategoryEdit() {
                         className='ml-6 inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                       >
                         <span className='ml-2 text-gray-600 dark:text-gray-400'>
-                          Tạm khóa
+                          Không công khai
                         </span>
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
                 </div>
+
                 <div className='my-2'>
                   <img
                     className='w-[100px] h-[100px] object-cover mb-2'

@@ -214,10 +214,10 @@ function CategoryAdd() {
           >
             <Radio.Group defaultValue={true}>
               <Radio className='text-gray-700 dark:text-gray-400' value={true}>
-                Kích hoạt
+                Công khai
               </Radio>
               <Radio className='text-gray-700 dark:text-gray-400' value={false}>
-                Hủy kích hoạt
+                Không công khai
               </Radio>
             </Radio.Group>
           </Form.Item>

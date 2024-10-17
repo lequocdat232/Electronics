@@ -532,7 +532,7 @@ acorn-jsx@^5.3.2:
 
 add@^2.0.6:
   version "2.0.6"
-  resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  resolved "https://registry.npmjs.org/add/-/add-2.0.6.tgz"
   integrity sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==
 
 ajv@^6.12.4:
@@ -1194,7 +1194,7 @@ imurmurhash@^0.1.4:
 
 invariant@^2.2.4:
   version "2.2.4"
-  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
   dependencies:
     loose-envify "^1.0.0"
@@ -1955,7 +1955,7 @@ react-fast-compare@^3.2.2:
 
 react-helmet-async@^2.0.5:
   version "2.0.5"
-  resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-2.0.5.tgz#cfc70cd7bb32df7883a8ed55502a1513747223ec"
+  resolved "https://registry.npmjs.org/react-helmet-async/-/react-helmet-async-2.0.5.tgz"
   integrity sha512-rYUYHeus+i27MvFE+Jaa4WsyBKGkL6qVgbJvSBoX8mbsWoABJXdEO0bZyi0F6i+4f0NuIb8AvqPMj3iXFHkMwg==
   dependencies:
     invariant "^2.2.4"
@@ -1964,7 +1964,7 @@ react-helmet-async@^2.0.5:
 
 react-icons@^5.3.0:
   version "5.3.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.3.0.tgz#ccad07a30aebd40a89f8cfa7d82e466019203f1c"
+  resolved "https://registry.npmjs.org/react-icons/-/react-icons-5.3.0.tgz"
   integrity sha512-DnUk8aFbTyQPSkCfF8dbX6kQjXA9DktMeJqfjrg6cK9vwQVMxmcA3BfP4QoiztVmEHtwlTgLFsPuH2NskKT6eg==
 
 react-is@^18.2.0:
@@ -1987,7 +1987,7 @@ react-router@6.26.2:
   dependencies:
     "@remix-run/router" "1.19.2"
 
-react@^18.3.1:
+react@*, "react@^16.6.0 || ^17.0.0 || ^18.0.0", "react@^18 || ^19", react@^18.3.1, react@>=16.0.0, react@>=16.11.0, react@>=16.8, react@>=16.9.0, react@>=18.0.0:
   version "18.3.1"
   resolved "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
@@ -2090,7 +2090,7 @@ semver@^7.6.0:
 
 shallowequal@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
+  resolved "https://registry.npmjs.org/shallowequal/-/shallowequal-1.1.0.tgz"
   integrity sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==
 
 shebang-command@^2.0.0:
@@ -2366,7 +2366,7 @@ yaml@^2.3.4:
 
 yarn@^1.22.22:
   version "1.22.22"
-  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.22.tgz#ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  resolved "https://registry.npmjs.org/yarn/-/yarn-1.22.22.tgz"
   integrity sha512-prL3kGtyG7o9Z9Sv8IPfBNrWTDmXB4Qbes8A9rEzt6wkJV8mUvoirjU0Mp3GGAU06Y0XQyA3/2/RQFVuK7MTfg==
 
 yocto-queue@^0.1.0:
