@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { axiosClient } from "../lib/axiosClient";
 import { UploadOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
+import { buildSlug } from "../helpers/buildSlug";
 // import { UploadProps } from "antd/es/upload";
 // import { UploadOutlined } from "@ant-design/icons";
 interface ICategory {
@@ -122,13 +123,10 @@ function CategoryEdit() {
       });
     },
   });
-  const generateSlug = (category_name: string) => {
-    return category_name.toLowerCase().replace(/\s+/g, "-"); // Convert to lowercase // Remove leading/trailing hyphens
-  };
 
   const onFinishUpdate = async (values: ICategory) => {
     if (!values.slug) {
-      values.slug = generateSlug(String(values.category_name));
+      values.slug = buildSlug(String(values.category_name));
     }
     if (fileList.length === 0) {
       updateMutationCategory.mutate(values);

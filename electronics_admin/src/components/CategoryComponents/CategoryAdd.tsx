@@ -17,6 +17,7 @@ import { axiosClient } from "../../lib/axiosClient";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
+import { buildSlug } from "../../helpers/buildSlug";
 
 interface ICategory {
   category_name?: string;
@@ -96,13 +97,10 @@ function CategoryAdd() {
     },
   });
 
-  const generateSlug = (category_name: string) => {
-    return category_name.toLowerCase().replace(/\s+/g, "-"); // Convert to lowercase // Remove leading/trailing hyphens
-  };
   // Submit Category create
   const onFinishAdd = async (values: ICategory) => {
     if (!values.slug) {
-      values.slug = generateSlug(String(values.category_name));
+      values.slug = buildSlug(String(values.category_name));
     }
     if (fileList.length === 0) {
       createMutationCategory.mutate(values);
