@@ -214,10 +214,10 @@ function BrandAdd() {
           >
             <Radio.Group>
               <Radio className='text-gray-700 dark:text-gray-400' value={true}>
-                Kích hoạt
+                Công khai
               </Radio>
               <Radio className='text-gray-700 dark:text-gray-400' value={false}>
-                Không kích hoạt
+                Không công khai
               </Radio>
             </Radio.Group>
           </Form.Item>
