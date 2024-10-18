@@ -127,6 +127,8 @@ function CategoryEdit() {
   const onFinishUpdate = async (values: ICategory) => {
     if (!values.slug) {
       values.slug = buildSlug(String(values.category_name));
+    } else if (values.slug) {
+      values.slug = buildSlug(String(values.slug));
     }
     if (fileList.length === 0) {
       updateMutationCategory.mutate(values);
@@ -161,9 +163,9 @@ function CategoryEdit() {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Electronics - Sửa nhân viên </title>
+        <title>Electronics - Sửa danh mục </title>
         <link rel='canonical' href={window.location.href} />
-        <meta name='description' content='Sửa nhân viên' />
+        <meta name='description' content='Sửa danh mục' />
       </Helmet>
       {contextHolder}
       <main className='h-full overflow-y-auto'>
@@ -199,10 +201,25 @@ function CategoryEdit() {
                   >
                     <Input
                       placeholder='Nhập tên danh mục'
-                      className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
+                      className='!py-[0.625rem] pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                     />
                   </Form.Item>
-
+                  <Form.Item
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
+                        Thứ tự
+                      </span>
+                    }
+                    name='order'
+                  >
+                    <Input
+                      min={0}
+                      className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
+                      type='number'
+                    ></Input>
+                  </Form.Item>
+                </div>
+                <div className='gap-[15px]'>
                   <Form.Item
                     label={
                       <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
@@ -217,29 +234,7 @@ function CategoryEdit() {
                     <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
-                  <Form.Item
-                    label={
-                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                        Thứ tự
-                      </span>
-                    }
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng nhập thứ tự",
-                      },
-                    ]}
-                    name='order'
-                  >
-                    <Input
-                      min={0}
-                      className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                      type='number'
-                    ></Input>
-                  </Form.Item>
-                </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
+                <div className='gap-[15px]'>
                   <Form.Item
                     name='description'
                     label={

@@ -88,6 +88,10 @@ function CategoryAdd() {
       formCreate.resetFields();
       setFileList([]);
       navigate("/category", { state: { reload: true } });
+      messageApi.open({
+        type: "success",
+        content: "Thêm danh mục thành công!",
+      });
     },
     onError: () => {
       messageApi.open({
@@ -101,6 +105,8 @@ function CategoryAdd() {
   const onFinishAdd = async (values: ICategory) => {
     if (!values.slug) {
       values.slug = buildSlug(String(values.category_name));
+    } else if (values.slug) {
+      values.slug = buildSlug(String(values.slug));
     }
     if (fileList.length === 0) {
       createMutationCategory.mutate(values);
@@ -222,7 +228,7 @@ function CategoryAdd() {
           <Form.Item
             label={
               <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                Ảnh đại diện
+                Ảnh danh mục
               </span>
             }
           >

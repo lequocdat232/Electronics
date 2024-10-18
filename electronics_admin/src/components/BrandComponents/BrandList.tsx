@@ -148,9 +148,9 @@ function BrandList() {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Electronics - Danh mục </title>
+        <title>Electronics - Thương hiệu </title>
         <link rel='canonical' href={window.location.href} />
-        <meta name='description' content='Danh mục' />
+        <meta name='description' content='Thương hiệu' />
       </Helmet>
       {contextHolder}
       <div className='col-span-12 md:col-span-7'>

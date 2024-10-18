@@ -88,6 +88,10 @@ function BrandAdd() {
       formCreate.resetFields();
       setFileList([]);
       navigate("/brand", { state: { reload: true } });
+      messageApi.open({
+        type: "success",
+        content: "Thêm thương hiệu thành công",
+      });
     },
     onError: () => {
       messageApi.open({
@@ -101,6 +105,8 @@ function BrandAdd() {
   const onFinishAdd = async (values: IBrand) => {
     if (!values.slug) {
       values.slug = buildSlug(String(values.brand_name));
+    } else if (values.slug) {
+      values.slug = buildSlug(String(values.slug));
     }
     if (fileList.length === 0) {
       createMutationBrand.mutate(values);
@@ -197,12 +203,6 @@ function BrandAdd() {
               <span className='text-gray-700 dark:text-gray-400'>Thứ tự</span>
             }
             name='order'
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập thứ tự hiển thị",
-              },
-            ]}
           >
             <Input
               type='number'
@@ -220,17 +220,17 @@ function BrandAdd() {
           >
             <Radio.Group>
               <Radio className='text-gray-700 dark:text-gray-400' value={true}>
-                Hoạt động
+                Kích hoạt
               </Radio>
               <Radio className='text-gray-700 dark:text-gray-400' value={false}>
-                Không hoạt động
+                Không kích hoạt
               </Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
             label={
               <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                Ảnh đại diện
+                Ảnh thương hiệu
               </span>
             }
           >

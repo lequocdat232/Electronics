@@ -18,8 +18,7 @@ import { axiosClient } from "../lib/axiosClient";
 import { UploadOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { buildSlug } from "../helpers/buildSlug";
-// import { UploadProps } from "antd/es/upload";
-// import { UploadOutlined } from "@ant-design/icons";
+
 interface TBrand {
   _id?: string;
   brand_name?: string;
@@ -113,13 +112,13 @@ function BrandEdit() {
       });
       messageApi.open({
         type: "success",
-        content: "Cập nhật danh mục thành công!",
+        content: "Cập nhật thương hiệu thành công!",
       });
     },
     onError: () => {
       messageApi.open({
         type: "error",
-        content: "Cập nhật danh mục lỗi!",
+        content: "Cập nhật thương hiệu lỗi!",
       });
     },
   });
@@ -127,6 +126,8 @@ function BrandEdit() {
   const onFinishUpdate = async (values: TBrand) => {
     if (!values.slug) {
       values.slug = buildSlug(String(values.brand_name));
+    } else if (values.slug) {
+      values.slug = buildSlug(String(values.slug));
     }
     if (fileList.length === 0) {
       updateMutationBrand.mutate(values);
@@ -161,9 +162,9 @@ function BrandEdit() {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Electronics - Sửa nhân viên </title>
+        <title>Electronics - Sửa thương hiệu</title>
         <link rel='canonical' href={window.location.href} />
-        <meta name='description' content='Sửa nhân viên' />
+        <meta name='description' content='Sửa thương hiệu' />
       </Helmet>
       {contextHolder}
       <main className='h-full overflow-y-auto'>
@@ -202,10 +203,25 @@ function BrandEdit() {
                   >
                     <Input
                       placeholder='Nhập tên của bạn'
-                      className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
+                      className='!py-[0.625rem] pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                     />
                   </Form.Item>
-
+                  <Form.Item
+                    label={
+                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
+                        Thứ tự
+                      </span>
+                    }
+                    name='order'
+                  >
+                    <Input
+                      min={0}
+                      className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
+                      type='number'
+                    ></Input>
+                  </Form.Item>
+                </div>
+                <div className='  '>
                   <Form.Item
                     label={
                       <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
@@ -220,29 +236,7 @@ function BrandEdit() {
                     <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
-                  <Form.Item
-                    label={
-                      <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                        Thứ tự
-                      </span>
-                    }
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng nhập thứ tự hiển thị",
-                      },
-                    ]}
-                    name='order'
-                  >
-                    <Input
-                      min={0}
-                      className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input'
-                      type='number'
-                    ></Input>
-                  </Form.Item>
-                </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-[15px]'>
+                <div className='gap-[15px]'>
                   <Form.Item
                     name='description'
                     label={
@@ -295,7 +289,7 @@ function BrandEdit() {
                   <Form.Item
                     label={
                       <span className='block mt-4 mb-3 text-sm text-gray-700 dark:text-gray-400'>
-                        Ảnh danh mục
+                        Ảnh thương hiệu
                       </span>
                     }
                   >
