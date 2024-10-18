@@ -306,7 +306,7 @@ const ProductEdit = () => {
                           options={queryCategories.data?.categories_list.map(
                             (category: TCategory) => ({
                               value: category._id,
-                              label: category.category_name,
+                              label: category.category_name,                               
                             })
                           )}
                         />

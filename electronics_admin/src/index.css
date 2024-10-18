@@ -118,3 +118,9 @@
 .dark .fr-search :where(.css-dev-only-do-not-override-ccdg5a).ant-select-single.ant-select-show-arrow .ant-select-selection-item{
     color: #040404;
 }
+:where(.css-dev-only-do-not-override-ccdg5a).ant-input-outlined.ant-input-status-error:not(.ant-input-disabled){
+    background-color: transparent !important;
+}
+:where(.css-dev-only-do-not-override-ccdg5a).ant-form-item .ant-form-item-explain-error {
+    margin-top: 5px;
+}

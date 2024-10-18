@@ -204,7 +204,7 @@ const ProductAdd = () => {
                           },
                         ]}
                       >
-                        <Input className="pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" />
+                        <Input className=" pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" />
                       </Form.Item>
                     </label>
                   </div>
@@ -260,6 +260,7 @@ const ProductAdd = () => {
                         Danh mục sản phẩm
                       </span>
                       <Form.Item
+                        className="mg-top"
                         name="category"
                         rules={[
                           {
@@ -287,6 +288,7 @@ const ProductAdd = () => {
                         Thương hiệu
                       </span>
                       <Form.Item
+                      className="mg-top"
                         name="brand"
                         rules={[
                           {
