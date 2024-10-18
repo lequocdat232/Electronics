@@ -115,7 +115,7 @@ function BrandList() {
 
       messageApi.open({
         type: "success",
-        content: "Xóa danh mục thành công!",
+        content: "Xóa thương hiệu thành công!",
       });
     },
     onError: () => {

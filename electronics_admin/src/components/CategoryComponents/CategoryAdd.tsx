@@ -140,9 +140,9 @@ function CategoryAdd() {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Electronics - Thêm nhân viên </title>
+        <title>Electronics - Thêm danh mục </title>
         <link rel='canonical' href={window.location.href} />
-        <meta name='description' content='Thêm nhân viên' />
+        <meta name='description' content='Thêm danh mục' />
       </Helmet>
       {contextHolder}
       <div className='col-span-12 md:col-span-5'>
@@ -154,7 +154,7 @@ function CategoryAdd() {
         >
           <Form.Item
             name='category_name'
-            rules={[{ required: true, message: "Xin hãy điền tên danh mục" }]}
+            rules={[{ required: true, message: "Vui lòng điền tên danh mục" }]}
           >
             <label className='block mt-4 text-sm'>
               <span className='text-gray-700 dark:text-gray-400'>

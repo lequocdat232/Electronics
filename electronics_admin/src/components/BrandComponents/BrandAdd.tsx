@@ -160,7 +160,7 @@ function BrandAdd() {
           <Form.Item
             name='brand_name'
             rules={[
-              { required: true, message: "Xin hãy điền tên thương hiệu" },
+              { required: true, message: "Vui lòng điền tên thương hiệu" },
             ]}
           >
             <label className='block mt-4 text-sm'>

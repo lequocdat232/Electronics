@@ -197,10 +197,7 @@ function CategoryEdit() {
                       { required: true, message: "Vui lòng nhập tên danh mục" },
                     ]}
                   >
-                    <Input
-                      placeholder='Nhập tên danh mục'
-                      className='!py-[0.625rem] pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
-                    />
+                    <Input className='!py-[0.625rem] pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
                   <Form.Item
                     label={

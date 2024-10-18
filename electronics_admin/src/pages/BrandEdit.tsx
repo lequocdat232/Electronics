@@ -195,14 +195,11 @@ function BrandEdit() {
                     rules={[
                       {
                         required: true,
-                        message: "Xin hãy điền tên thương hiệu",
+                        message: "Vui lòng điền tên thương hiệu",
                       },
                     ]}
                   >
-                    <Input
-                      placeholder='Nhập tên của bạn'
-                      className='!py-[0.625rem] pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
-                    />
+                    <Input className='!py-[0.625rem] pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
                   <Form.Item
                     label={
