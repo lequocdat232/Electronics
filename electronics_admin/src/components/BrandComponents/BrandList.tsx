@@ -1,6 +1,6 @@
 import { SETTINGS } from "../../constants/settings";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { axiosClient } from "../../lib/axiosClient";
 import { Helmet } from "react-helmet-async";
@@ -42,7 +42,6 @@ function BrandList() {
   const name = keyword ? keyword : null;
   const slug_brand = params.get("slug");
   const slug = slug_brand ? slug_brand : null;
-  const msg = params.get("msg");
   const navigate = useNavigate();
   const [brands, setBrands] = useState<BrandsResponse | null>(null);
 
@@ -89,23 +88,12 @@ function BrandList() {
   });
 
   const { isLoading } = getAllBrand;
-  const hasShownMessageRef = useRef(false);
-  useEffect(() => {
-    if (msg && msg !== null && !hasShownMessageRef.current) {
-      messageApi.open({
-        type: "success",
-        content: "Thêm thành viên thành công!",
-      });
-      hasShownMessageRef.current = true;
-    }
-  }, [msg, messageApi]);
 
   useEffect(() => {
     if (
       page === 1 &&
       !params.has("msg") &&
       !params.has("keyword") &&
-      !params.has("slug") &&
       !params.has("name")
     ) {
       navigate("/brand");
@@ -211,7 +199,7 @@ function BrandList() {
                           ) : (
                             <img
                               className='w-[40px] h-[40px] object-cover'
-                              src='/images/noavatar.png'
+                              src='/images/noImage.jpg'
                               alt={item.logo_url}
                             />
                           )}

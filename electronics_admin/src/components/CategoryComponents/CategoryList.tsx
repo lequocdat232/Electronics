@@ -219,7 +219,7 @@ function CategoryList() {
                               ) : (
                                 <img
                                   className='w-[40px] h-[40px] object-cover'
-                                  src='/images/noavatar.png'
+                                  src='/images/noImage.jpg'
                                   alt={item.imageUrl}
                                 />
                               )}
