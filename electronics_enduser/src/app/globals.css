@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import "@/styles/a_default.css";
+/* @import "@/styles/bootstrap.css"; */
+@import "@/styles/i_nav.css";
+@import "@/styles/i_owl.css";
+@import "@/styles/g_fcp.css";
+@import "@/styles/m_banner.css";
+@import "@/styles/m_product_fcp.css";
+@import "@/styles/m_news_fcp.css";
+@import "@/styles/m_report.css";
+@import "@/styles/p_home.css";
+
+/*Default Row Col*/
+.container-df {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+/*Default Row Col*/
+
+@media (min-width : 1024px) {
+
+}
+@media (max-width : 768px) {
+  body {
+  }
+
+  /*Default Row Col*/
+  .row-0 {
+      display: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+  }
+
+  .col-0 {
+      display: none !important;
+      width: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+  }
+  /*Default Row Col*/
+}
+
+.bgcolor-2 {
+  background-color: #000 !important;
+}
+
+/*Subiz*/
+body #wpwidget .widget-layout {
+  right: 10px !important;
+  bottom: 10px !important;
+  z-index: 900 !important;
+}
+
+body #wpwidget .chat-button--img-container {
+  width: 45px !important;
+  height: 45px !important;
+}
+
+body #wpwidget img.chat-button--img {
+  width: 45px !important;
+  height: 45px !important;
+}
+/*Subiz*/
+
+/*Zalo*/
+.zalo-chat-widget {
+  /* display: none !important; */
+  right: 35px !important;
+  bottom: 90px !important;
+  z-index: 900 !important;
+}
+/*Zalo*/
+
+.pd-attribute img {
+  display: none ;
+}
+
+
+@media (max-width : 768px) {
+
+
+
+  .zalo-chat-widget {
+      right: 10px !important;
+      bottom: 140px !important;
+  }
+}
