@@ -177,12 +177,11 @@ function BrandList() {
                   <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
                     <th className='px-4 py-3'>Ảnh</th>
                     <th className='px-4 py-3'>Tên thương hiệu</th>
-                    <th className='px-4 py-3'>Mô tả</th>
-                    <th className='px-4 py-3'>Đường dẫn</th>
-                    <th className='px-4 py-3'>Trạng thái</th>
-                    <th className='px-4 py-3'>Thứ tự</th>
-                    <th className='px-4 py-3'>Sửa</th>
-                    <th className='px-4 py-3'>Xóa</th>
+                    <th className='px-4 py-3 md:w-[100px]'>Mô tả</th>
+                    <th className='pl-4 py-3 md:w-[100px]'>Đường dẫn</th>
+                    <th className='px-4 py-3 md:w-[120px]'>Trạng thái</th>
+                    <th className='px-4 py-3 md:w-[100px]'>Thứ tự</th>
+                    <th className='px-4 py-3 md:w-[150px]'>Hành động</th>
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
@@ -204,15 +203,19 @@ function BrandList() {
                             />
                           )}
                         </td>
-                        <td className='px-4 py-3 text-sm'>{item.brand_name}</td>
-                        <td className='px-4 py-3 text-xs'>
-                          <span className='py-1 font-semibold leading-tight'>
+                        <td className='px-4 py-3 text-sm md:w-[150px]'>
+                          {item.brand_name}
+                        </td>
+                        <td className='pl-4 py-3 text-xs'>
+                          <span className='py-1  md:w-[150px] font-semibold leading-tight truncate ...'>
                             {item.description}
                           </span>
                         </td>
-                        <td className='px-4 py-3 text-sm'>{item.slug}</td>
+                        <td className='md:w-[100px] px-4 py-3 text-sm truncate'>
+                          {item.slug}
+                        </td>
 
-                        <td className='px-4 py-3 text-sm '>
+                        <td className='px-4 py-3 text-sm md:w-[70px] flex justify-start mt-4 '>
                           {item.isActive ? (
                             <FaEarthAmericas
                               className='text-green-500 cursor-pointer m-auto'
@@ -225,7 +228,9 @@ function BrandList() {
                             />
                           )}
                         </td>
-                        <td className='px-4 py-3 text-xs'>{item.order}</td>
+                        <td className='px-4 py-3 text-xs truncate'>
+                          {item.order}
+                        </td>
                         <td className='px-4 py-3'>
                           <div className='flex items-center space-x-4 text-sm'>
                             <button
@@ -244,27 +249,25 @@ function BrandList() {
                                 <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
                               </svg>
                             </button>
-                          </div>
-                        </td>
-                        <td className='px-4 py-3 text-sm'>
-                          <button
-                            onClick={() => handleDelete(String(item._id))}
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              className='w-5 h-5'
-                              fill='none'
-                              viewBox='0 0 24 24'
-                              stroke='currentColor'
-                              strokeWidth='2'
+                            <button
+                              onClick={() => handleDelete(String(item._id))}
                             >
-                              <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m5 0H4'
-                              />
-                            </svg>
-                          </button>
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                className='w-5 h-5'
+                                fill='none'
+                                viewBox='0 0 24 24'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                              >
+                                <path
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
+                                  d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m5 0H4'
+                                />
+                              </svg>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))

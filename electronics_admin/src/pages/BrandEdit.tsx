@@ -170,7 +170,7 @@ function BrandEdit() {
       <main className='h-full overflow-y-auto'>
         <div className='container px-6 mx-auto grid'>
           <h2 className='my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200'>
-            Danh mục sản phẩm
+            Thương hiệu sản phẩm
           </h2>
           <div className='grid grid-cols-12 md:grid-cols-12 gap-[15px]'>
             <div className='col-span-12'>
@@ -197,8 +197,6 @@ function BrandEdit() {
                         required: true,
                         message: "Xin hãy điền tên thương hiệu",
                       },
-                      { max: 50, message: "Độ dài không được quá 50 ký tự" },
-                      { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
                     ]}
                   >
                     <Input
@@ -244,9 +242,6 @@ function BrandEdit() {
                         Mô tả
                       </span>
                     }
-                    rules={[
-                      { max: 500, message: "Độ dài không được quá 500 ký tự" },
-                    ]}
                   >
                     <TextArea className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -259,7 +254,7 @@ function BrandEdit() {
                         className='inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                       >
                         <span className='ml-2 text-gray-600 dark:text-gray-400'>
-                          Kích hoạt
+                          Công khai
                         </span>
                       </Radio>
 
@@ -268,7 +263,7 @@ function BrandEdit() {
                         className='ml-6 inline-flex items-center text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
                       >
                         <span className='ml-2 text-gray-600 dark:text-gray-400'>
-                          Không kích hoạt
+                          Không công khai
                         </span>
                       </Radio>
                     </Radio.Group>
@@ -282,7 +277,7 @@ function BrandEdit() {
                       getBrandById.data?.logo_url &&
                       getBrandById.data?.logo_url !== null
                         ? `${SETTINGS.URL_IMAGE}/${getBrandById.data?.logo_url}`
-                        : `/images/noavatar.png`
+                        : `/images/noImage.jpg`
                     }
                     alt={getBrandById.data?.logo_url}
                   />

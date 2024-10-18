@@ -161,8 +161,6 @@ function BrandAdd() {
             name='brand_name'
             rules={[
               { required: true, message: "Xin hãy điền tên thương hiệu" },
-              { max: 50, message: "Độ dài không được quá 50 ký tự" },
-              { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
             ]}
           >
             <label className='block mt-4 text-sm'>
@@ -180,15 +178,11 @@ function BrandAdd() {
               </span>
             }
             name='slug'
-            rules={[{ max: 50, message: "Độ dài không được quá 50 ký tự" }]}
           >
             <Input className='pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input' />
           </Form.Item>
 
-          <Form.Item
-            name='description'
-            rules={[{ max: 500, message: "Độ dài không được quá 500 ký tự" }]}
-          >
+          <Form.Item name='description'>
             <label className='block mt-4 text-sm'>
               <span className='text-gray-700 dark:text-gray-400'>Mô tả</span>
               <TextArea

@@ -194,8 +194,7 @@ function CategoryList() {
                     <th className='px-4 py-3'>Mô tả</th>
                     <th className='px-4 py-3'>Thứ tự</th>
                     <th className='px-4 py-3'>Trạng thái</th>
-                    <th className='px-4 py-3'>Sửa</th>
-                    <th className='px-4 py-3'>Xóa</th>
+                    <th className='px-4 py-3'>Hành động</th>
                   </tr>
                 </thead>
 
@@ -245,7 +244,8 @@ function CategoryList() {
                                 />
                               )}
                             </td>
-                            <td className='px-4 py-3'>
+
+                            <td className='px-4 py-3 grid grid-cols-2'>
                               <div className='flex items-center space-x-4 text-sm'>
                                 <button
                                   onClick={() => {
@@ -264,8 +264,6 @@ function CategoryList() {
                                   </svg>
                                 </button>
                               </div>
-                            </td>
-                            <td className='px-4 py-3'>
                               <div className='flex items-center space-x-4 text-sm'>
                                 <button
                                   onClick={() => {

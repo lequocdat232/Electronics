@@ -195,8 +195,6 @@ function CategoryEdit() {
                     }
                     rules={[
                       { required: true, message: "Vui lòng nhập tên danh mục" },
-                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
-                      { min: 4, message: "Độ dài ít nhất là 4 ký tự" },
                     ]}
                   >
                     <Input
@@ -227,9 +225,6 @@ function CategoryEdit() {
                       </span>
                     }
                     name='slug'
-                    rules={[
-                      { max: 50, message: "Độ dài ko được quá 50 ký tự" },
-                    ]}
                   >
                     <Input className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -242,9 +237,6 @@ function CategoryEdit() {
                         Mô tả
                       </span>
                     }
-                    rules={[
-                      { max: 500, message: "Độ dài ko được quá 500 ký tự" },
-                    ]}
                   >
                     <TextArea className='pl-3 block mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray' />
                   </Form.Item>
@@ -280,7 +272,7 @@ function CategoryEdit() {
                       getCategoryById.data?.imageUrl &&
                       getCategoryById.data?.imageUrl !== null
                         ? `${SETTINGS.URL_IMAGE}/${getCategoryById.data?.imageUrl}`
-                        : `/images/noavatar.png`
+                        : `/images/noImage.jpg`
                     }
                     alt={getCategoryById.data?.imageUrl}
                   />
