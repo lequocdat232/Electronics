@@ -154,7 +154,7 @@ function BrandList() {
             >
               <div className='grid gid-cols-12 md:grid-cols-4 gap-[15px]'>
                 <Form.Item name='keyword'>
-                  <Input placeholder='Nhập tên danh mục' />
+                  <Input placeholder='Nhập tên thương hiệu' />
                 </Form.Item>
                 <Form.Item>
                   <Button
@@ -176,7 +176,7 @@ function BrandList() {
                 <thead>
                   <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
                     <th className='px-4 py-3'>Ảnh</th>
-                    <th className='px-4 py-3'>Tên danh mục</th>
+                    <th className='px-4 py-3'>Tên thương hiệu</th>
                     <th className='px-4 py-3'>Mô tả</th>
                     <th className='px-4 py-3'>Đường dẫn</th>
                     <th className='px-4 py-3'>Trạng thái</th>
