@@ -20,7 +20,7 @@ interface TProducts {
   };
   brand: {
     _id?: string;
-    category_name: string;
+    brand_name: string;
   };
   description: string;
   thumbnail: string;
@@ -71,7 +71,7 @@ const ProductPage = () => {
   const messageShownRef = useRef(false);
 
   const page_str = params.get("page");
-  const page = page_str ? page_str : 1;
+  const page = page_str ? parseInt(page_str) : 1;
 
   const category_str = params.get("category");
   const category_id = category_str ? category_str : null;
@@ -204,6 +204,12 @@ const ProductPage = () => {
       }
     }
   }, [msg, messageApi]);
+  // Khởi tạo state cho trang hiện tại
+  const [currentPage, setCurrentPage] = useState(page);
+  useEffect(() => {
+    // Cập nhật currentPage khi giá trị của 'page' thay đổi trong URL
+    setCurrentPage(page);
+  }, [page, params]);
   return (
     <>
       <Helmet>
@@ -298,6 +304,7 @@ const ProductPage = () => {
                       <th className="px-4 py-3">Giá</th>
                       <th className="px-4 py-3">Danh mục</th>
                       <th className="px-4 py-3">Thương hiệu</th>
+                      <th className="px-4 py-3">Sắp xếp</th>
                       <th className="px-4 py-3 ">Hành động</th>
                     </tr>
                   </thead>
@@ -341,13 +348,22 @@ const ProductPage = () => {
                                   : "Liên Hệ"}
                               </td>
                               <td className="px-4 py-3 text-sm">
-                                {product.category.category_name}
+                                {
+                                  (
+                                    product.category as {
+                                      category_name?: string;
+                                    }
+                                  )?.category_name
+                                }
                               </td>
                               <td className="px-4 py-3 text-sm">
                                 {
                                   (product.brand as { brand_name?: string })
                                     ?.brand_name
                                 }
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                {product.order}
                               </td>
                               <td className="px-4 py-3">
                                 <div className="flex items-center space-x-4 text-sm">
@@ -409,17 +425,15 @@ const ProductPage = () => {
               </div>
               <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                 <span className="flex items-center col-span-3">
-                  Showing 21-30 of {getAllProduct.data?.products_list.length}
+                  {getAllProduct.data?.products_list.length}
                 </span>
-                <span className="col-span-2"></span>
-
-                <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+                <span className="flex col-span-6 mt-2 sm:mt-auto sm:justify-end">
                   <nav aria-label="Table navigation">
                     {getAllProduct?.data?.pagination.totalRecords >
                       getAllProduct?.data?.pagination.limit && (
                       <Pagination
                         className="inline-flex items-center"
-                        defaultCurrent={1}
+                        current={currentPage}
                         onChange={(page) => {
                           navigate(`/product?page=${page}`);
                         }}

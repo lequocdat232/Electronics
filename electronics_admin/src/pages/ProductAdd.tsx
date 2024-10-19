@@ -40,13 +40,17 @@ interface TProducts {
   };
   brand: {
     _id?: string;
-    category_name: string;
+    brand_name: string;
   };
   description: string;
   thumbnail: string;
   stock: number;
   slug: string;
   order: number;
+  specifications: {
+    type: string;
+    require: false;
+  };
 }
 const ProductAdd = () => {
   const navigate = useNavigate();
@@ -117,7 +121,7 @@ const ProductAdd = () => {
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
-  
+
   // Get brands
   const fetchBrands = async () => {
     const url = `${SETTINGS.URL_API}/v1/brands`;
@@ -288,7 +292,7 @@ const ProductAdd = () => {
                         Thương hiệu
                       </span>
                       <Form.Item
-                      className="mg-top"
+                        className="mg-top"
                         name="brand"
                         rules={[
                           {
@@ -345,6 +349,28 @@ const ProductAdd = () => {
                 <div className="form-group">
                   <label className="block mt-4 text-sm">
                     <span className="text-gray-700 dark:text-gray-400">
+                      Thông số kỹ thuật
+                    </span>
+                    <Form.Item
+                      name="specifications"
+                      className="pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                    >
+                      <Input.TextArea
+                        rows={5}
+                        className="pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                        style={{
+                          border: "none",
+                          outline: "none",
+                          boxShadow: "none",
+                          padding: 0,
+                        }}
+                      />
+                    </Form.Item>
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label className="block mt-4 text-sm">
+                    <span className="text-gray-700 dark:text-gray-400">
                       Chi tiết sản phẩm
                     </span>
                     <Form.Item
@@ -354,7 +380,6 @@ const ProductAdd = () => {
                       <Input.TextArea
                         rows={5}
                         className="pl-3 block w-full mt-1 text-sm dark:text-gray-300 dark:bg-gray-700 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                        placeholder="Jane Doe"
                         style={{
                           border: "none",
                           outline: "none",
