@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
+import { buildSlug } from "../helpers/buildSlug";
 
 const postSchema = new mongoose.Schema(
   {
-    title: {
+    post_name: {
       type: String,
       required: true,
       trim: true,
@@ -11,21 +12,19 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
+    thumbnail: {
+      type: String,
+      require: false,
+    },
     category: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
       },
     ],
-   
-    isPublished: {
+    isShowHome: {
       type: Boolean,
       default: false,
-    },
-    publishedAt: {
-      type: Date,
-      default: Date.now,
     },
     comments: [
       {
@@ -34,12 +33,35 @@ const postSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
+    slug: {
+      type: String,
+      require: false,
+      maxLength: 255,
+      unique: true,
+      trim: true,
+    },
+    post_description: {
+      type: String,
+      maxLength: 500,
+      trim: true,
+      require: false,
+    },
   },
+
   {
     timestamps: true,
   }
 );
 
-const Post = mongoose.model("Post", postSchema);
 
+
+postSchema.pre("save", function (next) {
+  const post = this;
+  if (post.post_name) {
+    post.slug = buildSlug(post.post_name);
+  }
+  next();
+});
+
+const Post = model("Post", postSchema);
 export default Post;

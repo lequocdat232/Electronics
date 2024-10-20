@@ -1,51 +1,67 @@
 import { ObjectId } from "mongoose";
 import Post from "../models/post.model";
 import createError from "http-errors";
+import { IPost } from "../types/modelTypes";
 
-type TComment = {
-  user: ObjectId; // Tham chiếu đến `Staff`
-  comment: string; // Nội dung bình luận
-  createdAt: Date; // Ngày tạo bình luận
-};
-type TPost = {
-  _id: ObjectId; // ID của bài viết
-  title: string; // Tiêu đề bài viết
-  content: string; // Nội dung bài viết
-  category: ObjectId; // ID của danh mục
-  isPublished: boolean; // Trạng thái xuất bản
-  publishedAt: Date; // Ngày xuất bản
-  comments: TComment[]; // Mảng bình luận
-  createdAt: Date; // Ngày tạo bài viết
-  updatedAt: Date; // Ngày cập nhật bài viết
-};
+const findAll = async (query: any) => {
+  /* Phân trang */
+  const page_str = query.page;
+  const limit_str = query.limit;
+  const page = page_str ? parseInt(page_str as string) : 1;
+  const limit = limit_str ? parseInt(limit_str as string) : 10;
+  /* Lọc theo từng điều kiện */
 
-const findAll = async ({ page, limit }: any) => {
-  const pageNumber = Math.max(parseInt(page) || 1, 1);
-  const limitNumber = Math.max(parseInt(limit) || 10, 1);
-  const skip = (pageNumber - 1) * limitNumber;
+  let objectFilters: any = {};
+  if (query.keyword && query.keyword != "") {
+    objectFilters = {
+      ...objectFilters,
+      topic_name: new RegExp(query.keyword, "i"),
+    };
+  }
 
-  const posts = await Post.find()
-    .skip(skip) // Bỏ qua các bản ghi trước đó
-    .limit(limitNumber); // Giới hạn số lượng bản ghi trả về
+  /* Sắp xếp */
+  let objSort: any = {};
+  const sortBy = query.sort || "createdAt"; // Mặc định sắp xếp theo ngày tạo giảm dần
+  const orderBy = query.order && query.order == "ASC" ? 1 : -1;
+  objSort = { ...objSort, [sortBy]: orderBy }; // Thêm phần tử sắp xếp động vào object {}
 
-  const totalRecords = await Post.countDocuments(); // Đếm tổng số bản ghi
+  const offset = (page - 1) * limit;
 
+  console.log("Post S", offset, limit);
+
+  //Đếm tổng số record hiện có của collection Product
+  const totalRecords = await Post.countDocuments(objectFilters);
+
+  /* Select * FROM product */
+  const posts = await Post.find({
+    ...objectFilters,
+  })
+    .select("-__v -id")
+
+    .sort(objSort)
+    .skip(offset)
+    .limit(limit);
   return {
-    posts,
-    totalRecords, // Trả về tổng số bản ghi
+    posts_list: posts,
+    sorts: objSort,
+    filters: {
+      topic_name: query.keyword || null,
+    },
+    pagination: {
+      page,
+      limit,
+      totalPages: Math.ceil(totalRecords / limit), //tổng số trang
+      totalRecords,
+    },
   };
 };
 
-
-const countAll = async () => {
-  const totalRecords = await Post.countDocuments();
-  return totalRecords;
-};
-
 const findById = async (id: string) => {
-  const post = await Post.findById(id, "-__v -id");
+  const post = await Post.findById(id, "-__v -id") // có thể liệt kê select vào tham số thứ 2 của hàm
+   
+  //Check sự tồn tại
   if (!post) {
-    throw createError(400, "Post not found!");
+    throw createError(400, "Product not found");
   }
   return post;
 };
@@ -63,14 +79,23 @@ const deleteById = async (id: string) => {
   return post;
 };
 
-const createDocument = async (payloads: TPost) => {
+const createDocument = async (body: any) => {
+  const payloads = {
+    post_name: body.post_name,
+    content: body.content,
+    thumbnail: body.thumbnail,
+    category: body.category,
+    isShowHome: body.isShowHome,
+    comments: body.comments,
+    slug: body.slug,
+    post_description: body.post_description,
+  };
   const post = await Post.create(payloads);
   return post;
 };
 
 export default {
   findAll,
-  countAll,
   findById,
   updateById,
   deleteById,
