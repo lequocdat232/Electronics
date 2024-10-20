@@ -179,11 +179,11 @@ function CategoryList() {
                   <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
                     <th className='px-4 py-3'>Ảnh</th>
                     <th className='px-4 py-3'>Tên danh mục</th>
-                    <th className='px-4 py-3'>Đường dẫn</th>
-                    <th className='px-4 py-3'>Mô tả</th>
-                    <th className='px-4 py-3'>Thứ tự</th>
-                    <th className='px-4 py-3'>Trạng thái</th>
-                    <th className='px-4 py-3'>Hành động</th>
+                    <th className='px-4 py-3 md:w-[100px]'>Mô tả</th>
+                    <th className='pl-4 py-3 md:w-[100px]'>Đường dẫn</th>
+                    <th className='px-4 py-3 md:w-[120px]'>Trạng thái</th>
+                    <th className='px-4 py-3 md:w-[100px]'>Thứ tự</th>
+                    <th className='px-4 py-3 md:w-[150px]'>Hành động</th>
                   </tr>
                 </thead>
 
@@ -214,33 +214,32 @@ function CategoryList() {
                             </td>
                             <td className='px-4 py-3 text-sm'>
                               {item.category_name}
-                            </td>
-                            <td className='px-4 py-3 text-xs'>{item.slug}</td>
+                            </td>{" "}
                             <td className='px-4 py-3 text-xs'>
                               {item.description}
                             </td>
-                            <td className='px-4 py-3 text-xs'>{item.order}</td>
+                            <td className='px-4 py-3 text-xs'>{item.slug}</td>
                             <td className='px-4 py-3 text-sm '>
                               {item.isActive ? (
                                 <FaEarthAmericas
                                   className='text-green-500 cursor-pointer m-auto'
-                                  title='Đang kích hoạt'
+                                  title='công khai'
                                 />
                               ) : (
                                 <FaEarthAmericas
                                   className='text-red-500 cursor-pointer m-auto'
-                                  title='Bị khóa'
+                                  title='không công khai'
                                 />
                               )}
                             </td>
-
-                            <td className='px-4 py-3 grid grid-cols-2'>
+                            <td className='px-4 py-3 text-xs'>{item.order}</td>
+                            <td className='px-4 py-3'>
                               <div className='flex items-center space-x-4 text-sm'>
                                 <button
                                   onClick={() => {
                                     navigate(`/category/${item._id}`);
                                   }}
-                                  className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                  className='flex items-center justify-between px-1 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                                   aria-label='Edit'
                                 >
                                   <svg
@@ -252,28 +251,28 @@ function CategoryList() {
                                     <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
                                   </svg>
                                 </button>
-                              </div>
-                              <div className='flex items-center space-x-4 text-sm'>
                                 <button
                                   onClick={() => {
                                     handleDelete(String(item._id));
                                   }}
-                                  className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                  className='flex items-center justify-between px-1 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                                   aria-label='Delete'
                                 >
                                   <svg
+                                    xmlns='http://www.w3.org/2000/svg'
                                     className='w-5 h-5'
-                                    aria-hidden='true'
-                                    fill='currentColor'
-                                    viewBox='0 0 20 20'
+                                    fill='none'
+                                    viewBox='0 0 24 24'
+                                    stroke='currentColor'
+                                    strokeWidth='2'
                                   >
                                     <path
-                                      fillRule='evenodd'
-                                      d='M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z'
-                                      clipRule='evenodd'
-                                    ></path>
+                                      strokeLinecap='round'
+                                      strokeLinejoin='round'
+                                      d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m5 0H4'
+                                    />
                                   </svg>
-                                </button>{" "}
+                                </button>
                               </div>
                             </td>
                           </tr>

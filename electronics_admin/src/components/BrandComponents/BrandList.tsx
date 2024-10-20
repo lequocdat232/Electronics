@@ -219,12 +219,12 @@ function BrandList() {
                           {item.isActive ? (
                             <FaEarthAmericas
                               className='text-green-500 cursor-pointer m-auto'
-                              title='Đang kích hoạt'
+                              title='công khai'
                             />
                           ) : (
                             <FaEarthAmericas
                               className='text-red-500 cursor-pointer m-auto'
-                              title='Bị khóa'
+                              title='không công khai'
                             />
                           )}
                         </td>
@@ -237,7 +237,7 @@ function BrandList() {
                               onClick={() => {
                                 navigate(`/brand/${item._id}`);
                               }}
-                              className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                              className='flex items-center justify-between px-1 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               aria-label='Edit'
                             >
                               <svg
@@ -250,6 +250,7 @@ function BrandList() {
                               </svg>
                             </button>
                             <button
+                              className='flex items-center justify-between px-1 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               onClick={() => handleDelete(String(item._id))}
                             >
                               <svg
