@@ -1,7 +1,6 @@
 import { ObjectId } from "mongoose";
 import Post from "../models/post.model";
 import createError from "http-errors";
-import { IPost } from "../types/modelTypes";
 
 const findAll = async (query: any) => {
   /* Phân trang */

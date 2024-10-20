@@ -1,6 +1,6 @@
 import Topic from "../models/topic.model";
-import { ITopic } from "../types/modelTypes";
 import createError from "http-errors"
+import { ITopic } from "../types/modes";
 const createDocument = async (payload: ITopic) => {
   const topic = await Topic.create(payload);
   return topic;
