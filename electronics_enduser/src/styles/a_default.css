@@ -69,7 +69,7 @@ body, input, button, option, textarea, label, select, legend {
 /*Page BgColor*/
 .bgcolor-main {
     position: relative;
-    background-color: #e3007b;
+    background-color: #007ae3;
 }
 
 @media (min-width : 1200px) {
@@ -140,7 +140,7 @@ body, input, button, option, textarea, label, select, legend {
 }
 
 .tcolor-1 {
-    color: #e3007b;
+    color: #007ae3;
 }
 
 .tcolor-2 {
@@ -318,12 +318,12 @@ textarea {
 }
 
     .breadcrumb a {
-        color: #e3007b;
+        color: #007ae3;
         font-size: 12px;
     }
 
     .breadcrumb .breadcrumb-item:first-child a {
-        color: #e3007b;
+        color: #007ae3;
     }
 
 /*Header*/
@@ -585,7 +585,7 @@ textarea {
 
 /*
         .box-nav-promotion li a:hover span {
-            color: #e3007b !important
+            color: #007ae3 !important
         }
             */
 
@@ -635,7 +635,7 @@ textarea {
 
         .footer-content a b {
             display: block;
-            color: #e3007b;
+            color: #007ae3;
             margin-bottom: 10px;
         }
 
@@ -649,7 +649,7 @@ textarea {
 
     .footer-social ul li:nth-child(1) span, .footer-social ul li:nth-child(5) span {
         display: block;
-        color: #e3007b;
+        color: #007ae3;
         font-weight: bold;
     }
 

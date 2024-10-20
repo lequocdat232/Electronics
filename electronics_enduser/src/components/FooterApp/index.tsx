@@ -97,7 +97,7 @@ const FooterApp = () => {
           <div className="col-12 col-md-6 col-lg-3">
             <ul className="list-unstyled">
               <li className="v-menu-item">
-                <a data-id={130} href="javascript:" title="Hỗ trợ khách hàng">
+                <a data-id={130} href=":" title="Hỗ trợ khách hàng">
                   
                   <span> Hỗ trợ khách hàng </span>
                   <span
@@ -204,7 +204,7 @@ const FooterApp = () => {
           <div className="col-12 col-md-6 col-lg-3">
             <ul className="list-unstyled">
               <li className="v-menu-item">
-                <a data-id={131} href="javascript:" title="Hỗ trợ khách hàng">
+                <a data-id={131} href=":" title="Hỗ trợ khách hàng">
                   
                   <span>
                     
@@ -388,12 +388,8 @@ const FooterApp = () => {
     </div>
     <div className="footer-createby bg-createby">
       <div className="container">
-        <div className="createby">
-          © 2007 Công ty Cổ phần MEDIAMART Việt Nam - ĐCĐK: 29F Hai Bà Trưng.
-          GPĐKKD số: 0102516308 do Sở KHĐT Tp.Hà Nội cấp ngày 15/11/2007. Email:
-          hotro@mediamart.com.vn. Điện thoại: 1900 6741. Fax: 0243 933 0766
-          Website: mediamart.vn / thegioidienmay.com. Chịu trách nhiệm nội dung:
-          Nguyễn Đình Huy. Email: huynd@mediamart.com.vn
+        <div className="createby text-center">
+          © 2024 Copyright. Siêu thị điện máy
         </div>
       </div>
     </div>

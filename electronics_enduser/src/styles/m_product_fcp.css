@@ -763,8 +763,8 @@
         }
 
         .wrapbox-pNavCate li.active {
-            background-color: #e3007b;
-            border: 1px solid #e3007b;
+            background-color: #007ae3;
+            border: 1px solid #007ae3;
             color: #fff;
         }
 
@@ -773,7 +773,7 @@
             }
 
         .wrapbox-pNavCate li:hover {
-            border: 1px solid #e3007b;
+            border: 1px solid #007ae3;
         }
 
         .wrapbox-pNavCate li a:hover {

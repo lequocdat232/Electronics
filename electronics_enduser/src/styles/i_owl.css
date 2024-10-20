@@ -25,7 +25,8 @@
     opacity: 0.3;
 }
 
-.owl-loaded:hover .owl-next, .owl-loaded:hover .owl-prev {
+.owl-loaded:hover .owl-next, .owl-loaded:hover .owl-prev,
+.banner-list:hover .owl-next, .banner-list:hover .owl-prev {
     opacity: 1;
 }
 

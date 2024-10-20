@@ -31,7 +31,7 @@ function BannerAdv() {
                     data-id={6320}
                     >
                     <Image
-                        src="https://cdn.mediamart.vn/images/banner/laptop-tuu-truong-core-i5-i3-ryzen-5-gia-chi-tu-79-trieu_9341fddb.png"
+                        src="https://cdn.mediamart.vn/images/banner/laptop-tuu-truong-core-i5-i3-ryzen-5-gia-chi-tu-79-trieu_3b417ecf.png"
                         alt="Laptop Tựu Trường Core i5, i3, Ryzen 5 Giá chỉ từ 7.9 Triệu"
                         width={310}
                         height={145}

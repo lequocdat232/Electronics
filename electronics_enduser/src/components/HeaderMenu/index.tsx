@@ -1,7 +1,13 @@
+'use client'
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 
 const HeaderMenu = () => {
+    const [ isShowCat, setIsShowCat] = useState(false)
+    const toggleShowCat = () => {
+        setIsShowCat(!isShowCat)
+    }
+
     return (
         <div className="bgheader-menu">
             <div className="container">
@@ -17,12 +23,13 @@ const HeaderMenu = () => {
                                     aria-controls="navbarSupportedContent"
                                     aria-expanded="true"
                                     aria-label="Toggle navigation"
+                                    onClick = { toggleShowCat }
                                 >
                                     <span className="navbar-toggler-icon"></span>
                                     <b>Danh Mục<span> Sản Phẩm</span></b>
                                     <i></i>
                                 </button>
-                                <div className=" navbar-collapse" id="navbarMain">
+                                <div className={`navbar-collapse navbar-lg collapse ${isShowCat ? ('show') : '' }`} id="navbarMain">
                                     <ul className="navbar-nav">
                                         <li className="nav-item dropdown">
                                             <span className="nav-link dropdown-toggle" data-toggle="dropdown">

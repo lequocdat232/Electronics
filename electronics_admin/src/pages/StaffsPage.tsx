@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { SETTINGS } from "../constants/settings"
 import { axiosClient } from "../lib/axiosClient"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button, Form, Input, message, Pagination, Spin } from "antd"
 import { LoadingOutlined } from '@ant-design/icons';
 import { FaLock } from "react-icons/fa";
@@ -139,6 +139,11 @@ const StaffsPage = () => {
             navigate('/')
         }
     }, [navigate, user])
+
+	const [currentPage, setCurrentPage] = useState(page);
+	useEffect(() => {
+		setCurrentPage(page)
+	  }, [page, params]);
 	
   	return (
     <>
@@ -296,8 +301,9 @@ const StaffsPage = () => {
 										{getAllStaffs?.data?.pagination.totalRecords > getAllStaffs?.data?.pagination.limit && (
 											<Pagination
 												className="inline-flex items-center"
-												defaultCurrent={1}
+												current={currentPage}
 												onChange={(page) => {
+													setCurrentPage(page);
 													navigate(`/staffs?page=${page}`);
 												}}
 												total={getAllStaffs?.data?.pagination.totalRecords || 0}

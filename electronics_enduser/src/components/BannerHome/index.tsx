@@ -1,5 +1,5 @@
-import BannerAdv from './BannerAdv'
-import BannerSlider from './BannerSlider'
+import BannerAdv from "../BannerAdv"
+import BannerSlider from "../BannerSlider"
 
 const BannerHome = () => {
 

@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @import "@/styles/a_default.css";
 /* @import "@/styles/bootstrap.css"; */
 @import "@/styles/i_nav.css";
@@ -20,28 +19,42 @@
   padding-right: 0 !important;
 }
 /*Default Row Col*/
-
-@media (min-width : 1024px) {
-
+:root {
+  --swiper-navigation-size: 54px !important;
 }
-@media (max-width : 768px) {
-  body {
-  }
-
-  /*Default Row Col*/
-  .row-0 {
-      display: none !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-  }
-
-  .col-0 {
-      display: none !important;
-      width: 0 !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-  }
-  /*Default Row Col*/
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  display: none;
+}
+.swiper-button-prev {
+  left: 0;
+  background: url(../images/nav-slide.png) no-repeat 0 0 !important;
+  opacity: 0.3;
+  left: 0 !important;
+}
+.swiper-button-next {
+  right: 0;
+  background: url(../images/nav-slide.png) no-repeat -30px 0 !important;
+  opacity: 0.3;
+  right: 0 !important;
+}
+.banner-list:hover .swiper-button-prev,
+.banner-list:hover .swiper-button-next,
+.product-list:hover .swiper-button-prev,
+.product-list:hover .swiper-button-next {
+  opacity: 1;
+}
+.product-slider .item {
+  float: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+.product-slider .item .card-img-top {
+  text-align: left;
+  height: auto !important;
+}
+.collapse.show {
+  visibility: visible;
 }
 
 .bgcolor-2 {
@@ -76,16 +89,59 @@ body #wpwidget img.chat-button--img {
 /*Zalo*/
 
 .pd-attribute img {
-  display: none ;
+  display: none;
+}
+.product-box .product-list {
+  width: 100%;
+}
+.product-box .product-list .card,
+.pList-olw .card {
+  float: none;
+  width: auto;
+  max-width: 100% !important;
+}
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-collapse {
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+  }
+  .collapse {
+    visibility: visible;
+  }
 }
 
+@media (max-width: 768px) {
+  /*Default Row Col*/
+  .row-0 {
+    display: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 
-@media (max-width : 768px) {
-
-
+  .col-0 {
+    display: none !important;
+    width: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  /*Default Row Col*/
 
   .zalo-chat-widget {
-      right: 10px !important;
-      bottom: 140px !important;
+    right: 10px !important;
+    bottom: 140px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .box-banner {
+    width: 100% !important;
+  }
+  .banner-item{
+    float: none;
+  }
+  .banner-item a {
+    display: block;
   }
 }
